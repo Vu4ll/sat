@@ -1,0 +1,11 @@
+<h1 class="text-center mt-4">Hoş Geldiniz!</h1>
+<div class="text-center">
+    <% if (user) { %>
+        <p>Merhaba, <strong><%= user.email %></strong></p>
+        <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+        <a href="/logout" class="btn btn-danger">Çıkış Yap</a>
+    <% } else { %>
+        <a href="/login" class="btn btn-success">Giriş Yap</a>
+        <a href="/register" class="btn btn-warning">Kayıt Ol</a>
+    <% } %>
+</div>
