@@ -1,0 +1,46 @@
+<div class="container">
+    <h2 class="text-center">Gider Ekle</h2>
+    <% if (messages && messages.error) { %>
+        <div class="alert alert-danger text-center">
+            <%= messages.error %>
+        </div>
+    <% } %>
+    <form action="/expenses/add" method="post" class="w-50 mx-auto mt-3" id="expenseForm">
+        <div class="mb-3">
+            <label class="form-label">Kategori</label>
+            <select name="category" class="form-control" required>
+                <option value="Kira">Kira</option>
+                <option value="Alışveriş">Alışveriş</option>
+                <option value="Elektrik">Elektrik</option>
+                <option value="Doğalgaz">Doğalgaz</option>
+                <option value="Su">Su</option>
+                <option value="Abonelik">Abonelik</option>
+                <option value="Diğer">Diğer</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Miktar (₺)</label>
+            <input type="number" name="amount" class="form-control" id="amount" step="0.01" required>
+            <div id="errorMessage" class="alert alert-danger mt-2 d-none">Lütfen miktar giriniz.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Açıklama</label>
+            <textarea name="description" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Gider Ekle</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("expenseForm").addEventListener("submit", function (event) {
+        const amountInput = document.getElementById("amount");
+        const errorMessage = document.getElementById("errorMessage");
+
+        if (!amountInput.value.trim()) {
+            event.preventDefault();
+            errorMessage.classList.remove("d-none");
+        } else {
+            errorMessage.classList.add("d-none");
+        }
+    });
+</script>

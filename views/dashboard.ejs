@@ -1,14 +1,29 @@
-<!DOCTYPE html>
-<html lang="tr">
-
-<head>
-    <title>Dashboard</title>
-</head>
-
-<body>
-    <h1>Merhaba, <%= user.email %>!</h1>
-    <p>Burası Dashboard</p>
-    <a href="/logout">Çıkış Yap</a>
-</body>
-
-</html>
+<div class="container">
+    <h2 class="text-center">Giderler</h2>
+    <a href="/expenses/add" class="btn btn-success mb-3">+ Yeni Gider Ekle</a>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Kategori</th>
+                <th>Miktar</th>
+                <th>Açıklama</th>
+                <th>Tarih</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% expenses.forEach(expense => { %>
+                <tr>
+                    <td><%= expense.category %></td>
+                    <td>₺<%= expense.amount.toFixed(2) %></td>
+                    <td><%= expense.description || '-' %></td>
+                    <td><%= new Date(expense.date).toLocaleDateString() %></td>
+                    <td>
+                        <a href="/expenses/edit/<%= expense._id %>" class="btn btn-warning btn-sm">Düzenle</a>
+                        <a href="/expenses/delete/<%= expense._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>

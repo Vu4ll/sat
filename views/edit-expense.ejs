@@ -1,0 +1,26 @@
+<div class="container">
+    <h2 class="text-center">Gideri Düzenle</h2>
+    <form action="/expenses/edit/<%= expense._id %>" method="post" class="w-50 mx-auto mt-3">
+        <div class="mb-3">
+            <label class="form-label">Kategori</label>
+            <select name="category" class="form-control" required>
+                <option value="Kira" <%= expense.category === 'Kira' ? 'selected' : '' %>>Kira</option>
+                <option value="Alışveriş" <%= expense.category === 'Alışveriş' ? 'selected' : '' %>>Alışveriş</option>
+                <option value="Elektrik" <%= expense.category === 'Elektrik' ? 'selected' : '' %>>Elektrik</option>
+                <option value="Doğalgaz" <%= expense.category === 'Doğalgaz' ? 'selected' : '' %>>Doğalgaz</option>
+                <option value="Su" <%= expense.category === 'Su' ? 'selected' : '' %>>Su</option>
+                <option value="Abonelik" <%= expense.category === 'Abonelik' ? 'selected' : '' %>>Abonelik</option>
+                <option value="Diğer" <%= expense.category === 'Diğer' ? 'selected' : '' %>>Diğer</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Miktar (₺)</label>
+            <input type="number" name="amount" class="form-control" value="<%= expense.amount %>" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Açıklama</label>
+            <textarea name="description" class="form-control"><%= expense.description %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+    </form>
+</div>
