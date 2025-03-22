@@ -1,6 +1,32 @@
-### Sistem Analizi ve Tasarımı
+# Sistem Analizi ve Tasarımı
+**Sistem Analizi ve Tasarımı** dersi için **Gider Takip Sistemi** projesidir.
 
-# Yapılacaklar
+## Başlamadan Önce
+- Bu proje **Node.js v18** ve üzeri sürümleri içindir.
+- Proje de veritabanı olarak **MongoDB** kullanılmıştır ve bir **MongoDB** veritabanına sahip olmalısınız.
+- Projeyi çalıştırmak için aşağıdaki adımları izleyiniz:
+
+1. **Depoyu Klonlayın**
+    - `git clone https://github.com/Vu4ll/sat`
+    - `cd sat`
+
+2. **Gerekli Kütüphaneleri Yükleyin**
+    - `npm install`
+
+3. **Değişkenleri Ayarlayın**
+    - `.env` dosyası oluşturun ve gerekli değişkenleri ekleyin. Örnek `.env` dosyası:
+```env
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+```
+
+4. **Web Uygulamasını Başlatın**
+    - `npm start`
+
+5. **Tarayınıczdan Açın**
+    - Tarayıcınızda **http://localhost:3000** adresine gidin.
+
+## Yapılacaklar
 - ✅ | **Session** yönetiminden **çerezlere** geçilecek.
     - `express-session` kütüphanesinden `cookie-parser` kütüphanesi kullanılarak çerez kullanımına geçildi.
 - ✅ | **Dashboard** da gider tarihlerinde **saat yazmıyor** ve saatler veritabanına **+0 saat diliminde** kaydediliyor bu sorunun çözümü araştırılacak.
