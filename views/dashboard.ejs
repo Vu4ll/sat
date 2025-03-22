@@ -17,7 +17,7 @@
                     <td><%= expense.category %></td>
                     <td>₺<%= expense.amount.toFixed(2) %></td>
                     <td><%= expense.description || '-' %></td>
-                    <td><%= new Date(expense.date).toLocaleDateString() %></td>
+                    <td><%= expense.date %></td>
                     <td>
                         <a href="/expenses/edit/<%= expense._id %>" class="btn btn-warning btn-sm">Düzenle</a>
                         <a href="/expenses/delete/<%= expense._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
