@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="images/money-bills.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        footer section a {
+            font-size: 2rem;
+        }
+    </style>
 </head>
-<body>
+
+<body class="d-flex flex-column">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">Gider Takip</a>
@@ -26,21 +50,35 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-4 content">
         <% if (messages.error) { %>
             <div class="d-flex justify-content-center">
                 <div class="alert alert-danger text-center p-2 rounded-3 shadow-sm w-50">
                     <%= messages.error %>
                 </div>
             </div>
-        <% } %>        
+        <% } %>
 
         <%- body %>
     </div>
 
+    <footer class="text-center bg-dark text-white mt-auto">
+        <div class="container pt-3">
+            <section class="mb-3">
+                <a class="btn btn-link text-white btn-floating" href="https://vu4ll.com.tr/github" role="button">
+                    <i class="fab fa-github fa-2x"></i>
+                </a>
+            </section>
+        </div>
+
+        <div class="text-center text-white p-2" style="background-color: rgba(0, 0, 0, 0.2);">
+            &copy; 2025 Copyright
+        </div>
+    </footer>
+
     <script>
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
         document.cookie = "locale=" + navigator.language + "; path=/";
-    </script>    
+    </script>
 </body>
 </html>

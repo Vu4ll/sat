@@ -7,9 +7,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const path = require("path");
 const moment = require('moment-timezone');
+const crypto = require("crypto");
+const sendPasswordResetEmail = require("../util/mail");
 
 const ms = require('ms');
 const maxAge = ms('7d'); // çerezler için maks süre
+const APP_URL = process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 
 const flashMiddleware = require('../middlewares/flashMiddleware');
 const authenticateToken = require('../middlewares/authenticateToken');
@@ -56,8 +61,26 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (!emailRegex.test(email)) {
+        return res.cookie('messages',
+            { error: "Geçerli bir e-posta adresi girin." },
+            { httpOnly: true, maxAge }).redirect("/forgot-password");
+    }
+
+    if (!passwordRegex.test(password)) {
+        return res.cookie('messages',
+            { error: "Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermelidir!" },
+            { httpOnly: true, maxAge }).redirect(`/register`);
+    }
+
+    if (password !== confirmPassword) {
+        return res.cookie('messages',
+            { error: "Şifreler eşleşmiyor!" },
+            { httpOnly: true, maxAge }).redirect(`/register`);
+    }
 
     const user = await User.findOne({ email });
     if (user) {
@@ -109,7 +132,7 @@ app.post('/login', async (req, res) => {
 app.get('/dashboard', authenticateToken, async (req, res) => {
     const userLocale = req.cookies.locale ? req.cookies.locale.split('-')[0] : 'tr';
     moment.locale(userLocale);
-    
+
     const userTimeZone = req.cookies.timezone || 'Europe/Istanbul';
     const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
 
@@ -185,10 +208,150 @@ app.post('/expenses/edit/:id', authenticateToken, async (req, res) => {
     }
 });
 
+// Şifre sıfırlama formu
+app.get("/forgot-password", (req, res) => {
+    if (req.cookies.token) return res.redirect('/dashboard');
+
+    res.render("forgot-password", {
+        title: "Şifre Sıfırla",
+        user: req.user,
+        error: "",
+        success: ""
+    });
+});
+
+app.post("/forgot-password", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        if (!emailRegex.test(email)) {
+            return res.cookie('messages',
+                { error: "Geçerli bir e-posta adresi girin." },
+                { httpOnly: true, maxAge }).redirect("/forgot-password");
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.cookie('messages',
+                { error: "Bu e-posta kayıtlı değil!" },
+                { httpOnly: true, maxAge }).redirect("/forgot-password");
+        }
+
+        const token = crypto.randomBytes(32).toString("hex");
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + ms("1h");
+        await user.save();
+
+        const resetLink = `${APP_URL}/reset-password?token=${token}`;
+        // BURAYI UNUTMA //
+        // await sendPasswordResetEmail(email, resetLink);
+        console.log(email, resetLink);
+
+        res.cookie('resetSuccess', true, { httpOnly: true, maxAge });
+        return res.cookie('messages',
+            { success: 'Şifre sıfırlama e-postası gönderildi!' },
+            { httpOnly: true, maxAge }).redirect("/forgot-password-success");
+    } catch (error) {
+        console.error('Şifre Sıfırlama Hatası:', error);
+        return res.cookie('messages',
+            { error: "Bir hata oluştu. Lütfen daha sonra tekrar deneyin." },
+            { httpOnly: true, maxAge }).redirect("/forgot-password");
+    }
+});
+
+// Şifre sıfırlama başarı sayfası
+app.get("/forgot-password-success", (req, res) => {
+    if (req.cookies.token) return res.redirect('/dashboard');
+    if (!req.cookies.resetSuccess) return res.redirect('/forgot-password');
+
+    const messages = req.cookies.messages || {};
+    res.clearCookie('messages');
+
+    res.render("forgot-password-success", {
+        title: "Şifre Sıfırlama Başarılı",
+        user: req.user,
+        messages
+    });
+});
+
+app.get("/reset-password", async (req, res) => {
+    const { token } = req.query;
+
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return res.cookie('messages',
+            { error: "Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş." },
+            { httpOnly: true, maxAge }).redirect("/forgot-password");
+    }
+
+    res.render("reset-password", {
+        title: "Yeni Şifre Belirle",
+        user: req.user,
+        token
+    });
+});
+
+app.post("/reset-password", async (req, res) => {
+    const { token, newPassword, confirmNewPassword } = req.body;
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (newPassword != confirmNewPassword) {
+            return res.cookie('messages',
+                { error: "Şifreler eşleşmiyor!" },
+                { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
+        }
+
+        if (!user) {
+            return res.cookie('messages',
+                { error: "Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş." },
+                { httpOnly: true, maxAge }).redirect("/forgot-password");
+        }
+
+        if (!passwordRegex.test(newPassword)) {
+            return res.cookie('messages',
+                { error: "Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermelidir!" },
+                { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
+        }
+
+        if (await bcrypt.compare(newPassword, user.password)) {
+            return res.cookie('messages',
+                { error: "Yeni şifre, eski şifre ile aynı olamaz!" },
+                { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        return res.cookie('messages',
+            { success: 'Şifreniz başarıyla güncellendi. Giriş yapabilirsiniz.' },
+            { httpOnly: true, maxAge }).redirect("/login");
+    } catch (error) {
+        console.error('Şifre Sıfırlama Hatası:', error);
+        res.render("reset-password", {
+            title: "Yeni Şifre Belirle",
+            user: req.user,
+            token,
+            error: "Şifre sıfırlama işlemi başarısız oldu!"
+        });
+    }
+});
+
 // Çıkış Yap
 app.get('/logout', (req, res) => {
     res.clearCookie('token');
     res.redirect('/');
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(process.env.PORT || 3000, () => console.log(`Server running on port ${process.env.PORT || 3000}`));

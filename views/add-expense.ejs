@@ -20,7 +20,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Miktar (₺)</label>
-            <input type="number" name="amount" class="form-control" id="amount" step="0.01" required>
+            <input type="number" name="amount" class="form-control" id="amount" placeholder="Miktar giriniz" step="0.01" required>
             <div id="errorMessage" class="alert alert-danger mt-2 d-none">Lütfen miktar giriniz.</div>
         </div>
         <div class="mb-3">
@@ -30,17 +30,3 @@
         <button type="submit" class="btn btn-primary w-100">Gider Ekle</button>
     </form>
 </div>
-
-<!-- <script>
-    document.getElementById("expenseForm").addEventListener("submit", function (event) {
-        const amountInput = document.getElementById("amount");
-        const errorMessage = document.getElementById("errorMessage");
-
-        if (!amountInput.value.trim()) {
-            event.preventDefault();
-            errorMessage.classList.remove("d-none");
-        } else {
-            errorMessage.classList.add("d-none");
-        }
-    });
-</script> -->

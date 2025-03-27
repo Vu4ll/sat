@@ -3,12 +3,24 @@
     <form action="/login" method="post" class="w-50 mx-auto mt-3">
         <div class="mb-3">
             <label class="form-label">E-posta</label>
-            <input type="email" name="email" class="form-control" required>
+            <input type="email" name="email" class="form-control" placeholder="E-posta adresinizi giriniz" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Şifre</label>
-            <input type="password" name="password" class="form-control" required>
+            <input type="password" name="password" class="form-control" placeholder="Şifrenizi giriniz" required>
         </div>
         <button type="submit" class="btn btn-success w-100">Giriş Yap</button>
     </form>
+
+    <div class="text-center mt-3">
+        <p>
+            Bir hesabınız yok mu?
+            <a href="/register" class="text-decoration-none">Kayıt olun.</a>
+        </p>
+
+        <p>
+            Şifrenizi mi unuttunuz?
+            <a href="/forgot-password" class="text-decoration-none">Şifrenizi sıfırlayın.</a>
+        </p>
+    </div>
 </div>
