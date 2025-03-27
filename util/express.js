@@ -11,7 +11,7 @@ const crypto = require("crypto");
 const sendPasswordResetEmail = require("../util/mail");
 
 const ms = require('ms');
-const maxAge = ms('7d'); // çerezler için maks süre
+const maxAge = ms(process.env.COOKIE_MAX_AGE || "7d"); // çerezler için maks süre
 const APP_URL = process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
@@ -30,7 +30,7 @@ app.use('/images', express.static(path.join(__dirname, '..', 'views', 'images'))
 
 // JWT oluşturma fonksiyonu
 function createToken(user) {
-    return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.COOKIE_MAX_AGE || '7d' });
 }
 
 // Veritanı modelleri
@@ -130,10 +130,10 @@ app.post('/login', async (req, res) => {
 
 // Dashboard
 app.get('/dashboard', authenticateToken, async (req, res) => {
-    const userLocale = req.cookies.locale ? req.cookies.locale.split('-')[0] : 'tr';
+    const userLocale = req.cookies.locale ? req.cookies.locale.split('-')[0] : process.env.LOCALE || 'tr';
     moment.locale(userLocale);
 
-    const userTimeZone = req.cookies.timezone || 'Europe/Istanbul';
+    const userTimeZone = req.cookies.timezone ? req.cookies.timezone : process.env.TIMEZONE || 'Europe/Istanbul';
     const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
 
     const formattedExpenses = expenses.map(expense => ({
@@ -239,7 +239,7 @@ app.post("/forgot-password", async (req, res) => {
 
         const token = crypto.randomBytes(32).toString("hex");
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + ms("1h");
+        user.resetPasswordExpires = Date.now() + ms(process.env.RESET_PASSWORD_EXPIRES || "1h");
         await user.save();
 
         const resetLink = `${APP_URL}/reset-password?token=${token}`;
@@ -266,6 +266,7 @@ app.get("/forgot-password-success", (req, res) => {
 
     const messages = req.cookies.messages || {};
     res.clearCookie('messages');
+    res.clearCookie('resetSuccess');
 
     res.render("forgot-password-success", {
         title: "Şifre Sıfırlama Başarılı",
@@ -354,4 +355,6 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(process.env.PORT || 3000, () => console.log(`Server running on port ${process.env.PORT || 3000}`));
+app.listen(process.env.PORT || 3000, () =>
+    console.log(`Server running on ${process.env.APP_URL || "http://localhost"}:${process.env.PORT || 3000}`)
+);
