@@ -8,13 +8,24 @@ const app = express();
 const path = require("path");
 const moment = require('moment-timezone');
 const crypto = require("crypto");
-const sendPasswordResetEmail = require("../util/mail");
-
 const ms = require('ms');
-const maxAge = ms(process.env.COOKIE_MAX_AGE || "7d"); // çerezler için maks süre
-const APP_URL = process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`;
+const sendPasswordResetEmail = require("../util/mail");
+const dotenv = require('dotenv');
+dotenv.config();
+
+const env = {
+    PORT: process.env.PORT || 3000,
+    APP_URL: `${process.env.APP_URL}` || `http://localhost`,
+    COOKIE_MAX_AGE: process.env.COOKIE_MAX_AGE || "7d",
+    LOCALE: process.env.LOCALE || 'tr',
+    TIMEZONE: process.env.TIMEZONE || 'Europe/Istanbul',
+    RESET_PASSWORD_EXPIRES: process.env.RESET_PASSWORD_EXPIRES || "1h",
+};
+
+const maxAge = ms(env.COOKIE_MAX_AGE); // çerezler için maks süre
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+const APP_URL_W_PORT = env.PORT == 80 || env.PORT == 443 ? env.APP_URL : `${env.APP_URL}:${env.PORT}`
 
 const flashMiddleware = require('../middlewares/flashMiddleware');
 const authenticateToken = require('../middlewares/authenticateToken');
@@ -130,10 +141,10 @@ app.post('/login', async (req, res) => {
 
 // Dashboard
 app.get('/dashboard', authenticateToken, async (req, res) => {
-    const userLocale = req.cookies.locale ? req.cookies.locale.split('-')[0] : process.env.LOCALE || 'tr';
+    const userLocale = req.cookies.locale ? req.cookies.locale.split('-')[0] : env.LOCALE;
     moment.locale(userLocale);
 
-    const userTimeZone = req.cookies.timezone ? req.cookies.timezone : process.env.TIMEZONE || 'Europe/Istanbul';
+    const userTimeZone = req.cookies.timezone ? req.cookies.timezone : env.TIMEZONE;
     const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
 
     const formattedExpenses = expenses.map(expense => ({
@@ -214,9 +225,7 @@ app.get("/forgot-password", (req, res) => {
 
     res.render("forgot-password", {
         title: "Şifre Sıfırla",
-        user: req.user,
-        error: "",
-        success: ""
+        user: req.user
     });
 });
 
@@ -239,10 +248,10 @@ app.post("/forgot-password", async (req, res) => {
 
         const token = crypto.randomBytes(32).toString("hex");
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + ms(process.env.RESET_PASSWORD_EXPIRES || "1h");
+        user.resetPasswordExpires = Date.now() + ms(env.RESET_PASSWORD_EXPIRES);
         await user.save();
 
-        const resetLink = `${APP_URL}/reset-password?token=${token}`;
+        const resetLink = `${env.APP_URL}/reset-password?token=${token}`;
         // BURAYI UNUTMA //
         // await sendPasswordResetEmail(email, resetLink);
         console.log(email, resetLink);
@@ -340,12 +349,9 @@ app.post("/reset-password", async (req, res) => {
             { httpOnly: true, maxAge }).redirect("/login");
     } catch (error) {
         console.error('Şifre Sıfırlama Hatası:', error);
-        res.render("reset-password", {
-            title: "Yeni Şifre Belirle",
-            user: req.user,
-            token,
-            error: "Şifre sıfırlama işlemi başarısız oldu!"
-        });
+        return res.cookie('messages',
+            { error: "Şİfre sıfırlama işlemi başarısız oldu!" },
+            { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
     }
 });
 
@@ -355,6 +361,6 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(process.env.PORT || 3000, () =>
-    console.log(`Server running on ${process.env.APP_URL || "http://localhost"}:${process.env.PORT || 3000}`)
+app.listen(env.PORT, () =>
+    console.log(`Server running on ${APP_URL_W_PORT}`)
 );
