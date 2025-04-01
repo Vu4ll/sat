@@ -42,6 +42,7 @@ MAIL_PASS=your_app_pass_or_password
     - `moment-timezone` kütüphanesi kullanılarak kullanıcının **saat dilimini** çerezlere kaydederek o saat dilimine göre görüntülenmesi sağlandı.
     - Tarih **22 Mart 2025 21:27** şeklinde görüntülenmekte ama bunu kullanıcının dil bilgisi çerezlerde tutularak göre `moment.locale()` kullanarak işlenmektedir.
     - Kullanıcı tarayıcı dili **Felemenkçe** olarak kullanıyorsa onun saat dilimi ve diline göre göstermektedir. Yani az önce ki tarih kullanıcı da **22 maart 2025 19:27** olarak gözükecektir.
+    - Gider miktarları çerezlerden alınan dil bilgisine göre `toLocaleString()` metodu kullanılarak biçimlendirilmiş şekilde gösterilmektedir. 
 - ✅ | Şifre sıfırlama.
     - `nodemailer` kütüphanesi kuruldu.
     - Test etmek için `nodemailer` içerisinde dahil olan test e-postası gönderilmesi denendi. `util/testmail.js`
@@ -56,11 +57,16 @@ MAIL_PASS=your_app_pass_or_password
     - Kayıt olma işlemi için şifrenin **2 kere** girilmesi sağlandı.
 - ✅ | Sabitler `.env` dosyasına taşınacak.
     - Sabitler `.env` dosyasına taşındı ve varsayılan değerler belirtildi.
-- ⭕ | `chart.js` ile grafik oluşturulacak.
+- ✅ | `chart.js` ile grafik oluşturulacak.
+    - Gider verilerini almak için **API** oluşturuldu.
+    - **HTML** içerisinde bu **API** verilerini grafikte kullanmak için fonksiyon oluşturuldu. `views/js/fetch-expenses.js`
+    - **API** için kullanıcı yetkilendirmesi ile güvenlik sağlandı.
 - ❌ | Gider kategorileri **HTML** içerisinde yer almayacak onun yerine **veritabanından** çekilecek ve bu veriler işlenecek.
+- ❌ | Şifre sıfırlama için **rate limit** eklenecek.
+- ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
+- ❌ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
+- ❌ | Çoklu dil desteği eklenecek.
 - ❌ | Gönderilen e-postaları veritabanına loglama.
 - ❌ | Hataları veritabanına loglama.
-- ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
-- ❌ | Çoklu dil desteği eklenecek.
 
 ✅ Tamamlandı. | ⭕ Üzerinde çalışılıyor. | ❌ Tamamlanmadı.

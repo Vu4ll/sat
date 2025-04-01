@@ -37,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(flashMiddleware);
 app.use('/images', express.static(path.join(__dirname, '..', 'views', 'images')));
+app.use('/js', express.static(path.join(__dirname, '..', 'views', 'js')));
 // moment.locale('tr');
 
 // JWT oluşturma fonksiyonu
@@ -153,7 +154,7 @@ app.get('/dashboard', authenticateToken, async (req, res) => {
     }));
     // console.log(expenses, formattedExpenses);
 
-    res.render('dashboard', { title: "Dashboard", user: req.user, expenses: formattedExpenses });
+    res.render('dashboard', { title: "Dashboard", user: req.user, expenses: formattedExpenses, locale: userLocale });
 });
 
 // Gider ekleme
@@ -219,6 +220,26 @@ app.post('/expenses/edit/:id', authenticateToken, async (req, res) => {
     }
 });
 
+// Giderleri API ile çekme
+app.get("/api/expenses", async (req, res) => {
+    const token = req.cookies.token;
+
+    try {
+        if (!token) return res.status(401).json({ error: "Yetkisiz erişim" });
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) res.status(403).json({ error: "Geçersiz token" });
+            req.user = user;
+        });
+
+        const expenses = await Expense.find({ userId: req.user.id });
+        res.json(expenses);
+    } catch (error) {
+        console.error("Giderleri çekerken hata oluştu:", error);
+        res.status(500).json({ error: "Giderleri çekerken hata oluştu" });
+    }
+});
+
 // Şifre sıfırlama formu
 app.get("/forgot-password", (req, res) => {
     if (req.cookies.token) return res.redirect('/dashboard');
@@ -251,7 +272,7 @@ app.post("/forgot-password", async (req, res) => {
         user.resetPasswordExpires = Date.now() + ms(env.RESET_PASSWORD_EXPIRES);
         await user.save();
 
-        const resetLink = `${env.APP_URL}/reset-password?token=${token}`;
+        const resetLink = `${APP_URL_W_PORT}/reset-password?token=${token}`;
         // BURAYI UNUTMA //
         // await sendPasswordResetEmail(email, resetLink);
         console.log(email, resetLink);
@@ -350,7 +371,7 @@ app.post("/reset-password", async (req, res) => {
     } catch (error) {
         console.error('Şifre Sıfırlama Hatası:', error);
         return res.cookie('messages',
-            { error: "Şİfre sıfırlama işlemi başarısız oldu!" },
+            { error: "Şifre sıfırlama işlemi başarısız oldu!" },
             { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
     }
 });
