@@ -9,13 +9,9 @@
         <div class="mb-3">
             <label class="form-label">Kategori</label>
             <select name="category" class="form-control" required>
-                <option value="Kira">Kira</option>
-                <option value="Alışveriş">Alışveriş</option>
-                <option value="Elektrik">Elektrik</option>
-                <option value="Doğalgaz">Doğalgaz</option>
-                <option value="Su">Su</option>
-                <option value="Abonelik">Abonelik</option>
-                <option value="Diğer">Diğer</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.name %>"><%= category.name %></option>
+                <% }) %>
             </select>
         </div>
         <div class="mb-3">

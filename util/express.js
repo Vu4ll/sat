@@ -42,7 +42,7 @@ app.use('/js', express.static(path.join(__dirname, '..', 'views', 'js')));
 
 // JWT oluşturma fonksiyonu
 function createToken(user) {
-    return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: process.env.COOKIE_MAX_AGE || '7d' });
+    return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: env.COOKIE_MAX_AGE });
 }
 
 // Veritanı modelleri
@@ -158,9 +158,27 @@ app.get('/dashboard', authenticateToken, async (req, res) => {
 });
 
 // Gider ekleme
-app.get('/expenses/add', authenticateToken, (req, res) => {
-    res.render('add-expense', { title: "Gider Ekle", user: req.user });
+app.get('/expenses/add', authenticateToken, async (req, res) => {
+    const Category = require('../models/Category');
+
+    try {
+        const categories = await Category.find({});
+        res.render('add-expense', { title: "Gider Ekle", user: req.user, categories });
+    } catch (err) {
+        console.error("Kategori verisi alınamadı:", err);
+        res.render('add-expense', { title: "Gider Ekle", user: req.user, categories: [] });
+        return res.cookie('messages',
+            { error: "Gider kategorileri sunucudan alınamadı!" },
+            { httpOnly: true, maxAge }).redirect("/expenses/add");
+    }
 });
+
+// Geçici olarak kategori ekleme işlemi
+/* app.get("/add-categories", async (req, res) => {
+    const defaultCategories = ["Kira", "Alışveriş", "Elektrik", "Doğalgaz", "Su", "Abonelik", "Diğer"];
+    await Category.insertMany(defaultCategories.map(name => ({ name })));
+    res.send("Kategoriler eklendi");
+}); */
 
 // Gider ekleme işlemi
 app.post('/expenses/add', authenticateToken, async (req, res) => {

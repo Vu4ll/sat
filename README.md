@@ -61,7 +61,11 @@ MAIL_PASS=your_app_pass_or_password
     - Gider verilerini almak için **API** oluşturuldu.
     - **HTML** içerisinde bu **API** verilerini grafikte kullanmak için fonksiyon oluşturuldu. `views/js/fetch-expenses.js`
     - **API** için kullanıcı yetkilendirmesi ile güvenlik sağlandı.
-- ❌ | Gider kategorileri **HTML** içerisinde yer almayacak onun yerine **veritabanından** çekilecek ve bu veriler işlenecek.
+- ✅ | Gider kategorileri **HTML** içerisinde yer almayacak onun yerine **veritabanından** çekilecek ve bu veriler işlenecek.
+    - Kategoriler için veritabanı modeli oluşturuldu.
+    - Geçiçi olarak elle kategorilerin eklenmesi için `/add-categories` hedefi eklendi.
+    - Backend tarafta veriler işlenip frontend tarafa gönderilerek seçeneklerin görüntülenmesi sağlandı.
+    - ❌ | Kategori düzenleme paneli oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
 - ❌ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
