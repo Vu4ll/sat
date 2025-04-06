@@ -65,7 +65,14 @@ MAIL_PASS=your_app_pass_or_password
     - Kategoriler için veritabanı modeli oluşturuldu.
     - Geçiçi olarak elle kategorilerin eklenmesi için `/add-categories` hedefi eklendi.
     - Backend tarafta veriler işlenip frontend tarafa gönderilerek seçeneklerin görüntülenmesi sağlandı.
-    - ❌ | Kategori düzenleme paneli oluşturulacak.
+- ✅ | Kategori düzenleme paneli oluşturulacak.
+    - Panel için `/categories` hedefi oluşturuldu.
+    - Panelde kategoriler listelenmekte ve her kategori için düzenleme ve silme butonları bulunmaktadır.
+    - Yeni kategori eklemek için bir form alanı sağlanmıştır.
+    - Kategoriler üzerinde yapılan değişiklikler anında veritabanına kaydedilmektedir.
+    - Panel yalnızca **admin** yetkisine sahip kullanıcılar tarafından erişilebilir.
+    - Yetkilendirme, **JWT token** üzerinden sağlanmaktadır ve kullanıcı rolü kontrol edilmektedir.
+- ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
 - ❌ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.

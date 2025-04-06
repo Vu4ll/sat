@@ -4,13 +4,11 @@
         <div class="mb-3">
             <label class="form-label">Kategori</label>
             <select name="category" class="form-control" required>
-                <option value="Kira" <%= expense.category === 'Kira' ? 'selected' : '' %>>Kira</option>
-                <option value="Alışveriş" <%= expense.category === 'Alışveriş' ? 'selected' : '' %>>Alışveriş</option>
-                <option value="Elektrik" <%= expense.category === 'Elektrik' ? 'selected' : '' %>>Elektrik</option>
-                <option value="Doğalgaz" <%= expense.category === 'Doğalgaz' ? 'selected' : '' %>>Doğalgaz</option>
-                <option value="Su" <%= expense.category === 'Su' ? 'selected' : '' %>>Su</option>
-                <option value="Abonelik" <%= expense.category === 'Abonelik' ? 'selected' : '' %>>Abonelik</option>
-                <option value="Diğer" <%= expense.category === 'Diğer' ? 'selected' : '' %>>Diğer</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.name %>" <%= expense.category === category.name ? 'selected' : '' %>>
+                        <%= category.name %>
+                    </option>
+                <% }) %>
             </select>
         </div>
         <div class="mb-3">

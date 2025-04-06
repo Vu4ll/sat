@@ -41,6 +41,9 @@
                 <ul class="navbar-nav ms-auto">
                     <% if (user) { %>
                         <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                        <% if (role === "admin") { %>
+                            <li class="nav-item"><a class="nav-link" href="/categories">Kategori Yönetimi</a></li>
+                        <% } %>
                         <li class="nav-item"><a class="nav-link" href="/logout">Çıkış Yap</a></li>
                     <% } else { %>
                         <li class="nav-item"><a class="nav-link" href="/login">Giriş Yap</a></li>
@@ -63,6 +66,7 @@
         <%- body %>
     </div>
 
+    <br><br>
     <footer class="text-center bg-dark text-white mt-auto">
         <div class="container pt-3">
             <section class="mb-3">

@@ -40,36 +40,44 @@ app.use('/images', express.static(path.join(__dirname, '..', 'views', 'images'))
 app.use('/js', express.static(path.join(__dirname, '..', 'views', 'js')));
 // moment.locale('tr');
 
+const categoryRoutes = require('../routes/category');
+app.use('/categories', categoryRoutes);
+
 // JWT oluşturma fonksiyonu
 function createToken(user) {
-    return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: env.COOKIE_MAX_AGE });
+    return jwt.sign(
+        { id: user._id, email: user.email, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: env.COOKIE_MAX_AGE }
+    );
 }
 
 // Veritanı modelleri
 const User = require('../models/user.js');
 const Expense = require('../models/expense.js');
+const Category = require('../models/Category');
 
 // Ana Sayfa
 app.get('/', (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.render('index', { title: "Ana Sayfa", user: null });
+        return res.render('index', { title: "Ana Sayfa", user: null, role: null });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-            return res.render('index', { title: "Ana Sayfa", user: null });
+            return res.render('index', { title: "Ana Sayfa", user: null, role: null });
         }
 
-        res.render('index', { title: "Ana Sayfa", user });
+        res.render('index', { title: "Ana Sayfa", user, role: user.role });
     });
 });
 
 // Kayıt Sayfası
 app.get('/register', (req, res) => {
     if (req.cookies.token) return res.redirect('/dashboard');
-    res.render('register', { title: "Kayıt Ol", user: null });
+    res.render('register', { title: "Kayıt Ol", user: null, role: null });
 });
 
 app.post('/register', async (req, res) => {
@@ -117,7 +125,7 @@ app.get('/login', (req, res) => {
 
     const messages = req.cookies.messages || {};
     res.clearCookie('messages');
-    res.render('login', { title: "Giriş Yap", user: req.user, messages });
+    res.render('login', { title: "Giriş Yap", user: req.user, role: null, messages });
 });
 
 app.post('/login', async (req, res) => {
@@ -154,19 +162,23 @@ app.get('/dashboard', authenticateToken, async (req, res) => {
     }));
     // console.log(expenses, formattedExpenses);
 
-    res.render('dashboard', { title: "Dashboard", user: req.user, expenses: formattedExpenses, locale: userLocale });
+    res.render('dashboard', {
+        title: "Dashboard",
+        user: req.user,
+        role: req.user.role,
+        expenses: formattedExpenses,
+        locale: userLocale
+    });
 });
 
 // Gider ekleme
 app.get('/expenses/add', authenticateToken, async (req, res) => {
-    const Category = require('../models/Category');
-
     try {
         const categories = await Category.find({});
-        res.render('add-expense', { title: "Gider Ekle", user: req.user, categories });
+        res.render('add-expense', { title: "Gider Ekle", user: req.user, role: req.user.role, categories });
     } catch (err) {
         console.error("Kategori verisi alınamadı:", err);
-        res.render('add-expense', { title: "Gider Ekle", user: req.user, categories: [] });
+        res.render('add-expense', { title: "Gider Ekle", user: req.user, role: req.user.role, categories: [] });
         return res.cookie('messages',
             { error: "Gider kategorileri sunucudan alınamadı!" },
             { httpOnly: true, maxAge }).redirect("/expenses/add");
@@ -214,10 +226,11 @@ app.get('/expenses/delete/:id', authenticateToken, async (req, res) => {
 app.get('/expenses/edit/:id', authenticateToken, async (req, res) => {
     try {
         const expense = await Expense.findOne({ _id: req.params.id, userId: req.user.id });
+        const categories = await Category.find();
         if (!expense) return res.redirect('/dashboard');
-        res.render('edit-expense', { title: "Gider Düzenleme", user: req.user, expense });
+        res.render('edit-expense', { title: "Gider Düzenleme", user: req.user, role: req.user.role, expense, categories });
     } catch (err) {
-        res.status(500).send('Hata oluştu.');
+        res.status(500).redirect("/dashboard");
         console.error(err);
     }
 });
@@ -262,10 +275,7 @@ app.get("/api/expenses", async (req, res) => {
 app.get("/forgot-password", (req, res) => {
     if (req.cookies.token) return res.redirect('/dashboard');
 
-    res.render("forgot-password", {
-        title: "Şifre Sıfırla",
-        user: req.user
-    });
+    res.render("forgot-password", { title: "Şifre Sıfırla", user: req.user, role: null });
 });
 
 app.post("/forgot-password", async (req, res) => {
@@ -292,7 +302,7 @@ app.post("/forgot-password", async (req, res) => {
 
         const resetLink = `${APP_URL_W_PORT}/reset-password?token=${token}`;
         // BURAYI UNUTMA //
-        // await sendPasswordResetEmail(email, resetLink);
+        await sendPasswordResetEmail(email, resetLink);
         console.log(email, resetLink);
 
         res.cookie('resetSuccess', true, { httpOnly: true, maxAge });
@@ -319,6 +329,7 @@ app.get("/forgot-password-success", (req, res) => {
     res.render("forgot-password-success", {
         title: "Şifre Sıfırlama Başarılı",
         user: req.user,
+        role: null,
         messages
     });
 });
@@ -340,6 +351,7 @@ app.get("/reset-password", async (req, res) => {
     res.render("reset-password", {
         title: "Yeni Şifre Belirle",
         user: req.user,
+        role: null,
         token
     });
 });
