@@ -11,21 +11,21 @@ async function fetchExpenses() {
         const labels = Object.keys(categories);
         const data = Object.values(categories);
         const backgroundColors = [
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(54, 162, 235, 0.7)',
-            'rgba(255, 206, 86, 0.7)',
-            'rgba(75, 192, 192, 0.7)',
-            'rgba(153, 102, 255, 0.7)',
-            'rgba(255, 159, 64, 0.7)'
+            "rgba(255, 99, 132, 0.7)",
+            "rgba(54, 162, 235, 0.7)",
+            "rgba(255, 206, 86, 0.7)",
+            "rgba(75, 192, 192, 0.7)",
+            "rgba(153, 102, 255, 0.7)",
+            "rgba(255, 159, 64, 0.7)"
         ];
 
-        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const ctx = document.getElementById("expenseChart").getContext("2d");
         new Chart(ctx, {
-            type: 'doughnut',
+            type: "doughnut",
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Gider Dağılımı',
+                    label: "Gider Dağılımı",
                     data: data,
                     backgroundColor: backgroundColors.slice(0, labels.length),
                     borderWidth: 1
@@ -33,7 +33,7 @@ async function fetchExpenses() {
             },
             options: {
                 responsive: true,
-                plugins: { legend: { position: 'bottom' } }
+                plugins: { legend: { position: "bottom" } }
             }
         });
     } catch (error) {

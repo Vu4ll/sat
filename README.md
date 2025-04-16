@@ -72,6 +72,9 @@ MAIL_PASS=your_app_pass_or_password
     - Kategoriler üzerinde yapılan değişiklikler anında veritabanına kaydedilmektedir.
     - Panel yalnızca **admin** yetkisine sahip kullanıcılar tarafından erişilebilir.
     - Yetkilendirme, **JWT token** üzerinden sağlanmaktadır ve kullanıcı rolü kontrol edilmektedir.
+- ✅ | Ana **express** dosyası parçalara bölünecek.
+    - `routes` klasörüne hedefler parça parça olarak ayırıldı.
+    - Değişkenler bir `config.js` dosyasına taşındı.
 - ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
@@ -79,5 +82,10 @@ MAIL_PASS=your_app_pass_or_password
 - ❌ | Çoklu dil desteği eklenecek.
 - ❌ | Gönderilen e-postaları veritabanına loglama.
 - ❌ | Hataları veritabanına loglama.
+---
+- ❌ | Kategorilere de alt kategoriler eklenecek.
+- ❌ | `try-catch` mantığı olmadan kullanımı araştırılacak.
+- ❌ | Kullanıcılar birden fazla role sahip olabilmeli.
+- ❌ | Kullanıcı rolünü JWT yerine çerezlere şifrelenmiş olarak işlenmeli.
 
 ✅ Tamamlandı. | ⭕ Üzerinde çalışılıyor. | ❌ Tamamlanmadı.

@@ -9,11 +9,11 @@
 <div class="container">
     <h2 class="text-center">Giderler</h2>
     
-    <% if (expenses.length > 0) { %>
+    <% if (expenses && expenses.length > 0) { %>
         <canvas id="expenseChart"></canvas>
     <% } %>
 
-    <a href="/expenses/add" class="btn btn-success mb-3">+ Yeni Gider Ekle</a>
+    <a href="/expenses/add" class="btn btn-success mb-3"><i class="fa-solid fa-plus fa-xs"></i> Yeni Gider Ekle</a>
     <table class="table table-bordered">
         <thead class="table-dark">
             <tr>
@@ -41,6 +41,6 @@
     </table>
 </div>
 
-<% if (expenses.length > 0) { %>
+<% if (expenses && expenses.length > 0) { %>
     <script src="/js/fetch-expenses.js"></script>
 <% } %>
