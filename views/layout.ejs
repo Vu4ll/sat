@@ -30,15 +30,27 @@
         footer section a {
             font-size: 2rem;
         }
+
+        .custom-bg-dark {
+            background-color: #2e2c2c !important;
+        }
     </style>
 </head>
 
 <body class="d-flex flex-column">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark custom-bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/"><i class="fas fa-wallet me-2"></i>Gider Takip</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <div class="form-check form-switch nav-link d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox" id="themeToggle">
+                            <label class="form-check-label text-white" for="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </label>
+                        </div>
+                    </li>
                     <% if (user) { %>
                         <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
                         <% if (role === "admin") { %>
@@ -67,7 +79,7 @@
     </div>
 
     <br><br>
-    <footer class="text-center bg-dark text-white mt-auto">
+    <footer class="text-center custom-bg-dark text-white mt-auto">
         <div class="container pt-3">
             <section class="mb-3">
                 <a class="btn btn-link text-white btn-floating" href="https://vu4ll.com.tr/" role="button" target="_blank">
@@ -89,5 +101,6 @@
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
         document.cookie = "locale=" + navigator.language + "; path=/";
     </script>
+    <script src="/js/darkmode.js"></script>
 </body>
 </html>

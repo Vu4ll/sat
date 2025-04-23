@@ -75,7 +75,7 @@ router.post("/edit/:id", authenticateToken, async (req, res) => {
     try {
         await Expense.findOneAndUpdate(
             { _id: req.params.id, userId: req.user.id },
-            { category, amount, description }
+            { category, amount, description, date: new Date() }
         );
         res.redirect("/dashboard");
     } catch (err) {

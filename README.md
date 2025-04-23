@@ -78,7 +78,8 @@ MAIL_PASS=your_app_pass_or_password
 - ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
-- ❌ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
+- ✅ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
+    - Güncellenen veri de `date` değeri güncel tarih ile güncelleniyor.
 - ❌ | Çoklu dil desteği eklenecek.
 - ❌ | Gönderilen e-postaları veritabanına loglama.
 - ❌ | Hataları veritabanına loglama.
