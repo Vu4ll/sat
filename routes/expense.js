@@ -18,13 +18,6 @@ router.get("/add", authenticateToken, async (req, res) => {
     }
 });
 
-// Geçici olarak kategori ekleme işlemi
-/* router.get("/add-categories", async (req, res) => {
-    const defaultCategories = ["Kira", "Alışveriş", "Elektrik", "Doğalgaz", "Su", "Abonelik", "Diğer"];
-    await Category.insertMany(defaultCategories.map(name => ({ name })));
-    res.send("Kategoriler eklendi");
-}); */
-
 // Gider ekleme işlemi
 router.post("/add", authenticateToken, async (req, res) => {
     const { category, amount, description } = req.body;

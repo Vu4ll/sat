@@ -22,6 +22,7 @@ JWT_SECRET=your_jwt_secret
 APP_URL=your_app_url # Default is http://localhost:your_port
 PORT=your_port # Default is 3000
 COOKIE_MAX_AGE=your_max_age # In day format, default is 7d
+COOKIE_SECRET=your_cookie_secret
 LOCALE=your_locale # Default is tr
 TIMEZONE=your_timezone # Default is Europe/Istanbul
 RESET_PASSWORD_EXPIRES=your_reset_password_expires # In hour format, default is 1h
@@ -30,7 +31,7 @@ MAIL_PASS=your_app_pass_or_password
 ```
 
 4. **Web Uygulamasını Başlatın**
-    - `npm start`
+    - `npm start` komutunu girerek veya **Visual Studio Code** üzerinden **F5** tuşu ile uygulamayı başlatabilirsiniz.
 
 5. **Tarayıcınızdan Açın**
     - Tarayıcınızda **http://localhost:3000** adresine gidin.
@@ -72,21 +73,31 @@ MAIL_PASS=your_app_pass_or_password
     - Kategoriler üzerinde yapılan değişiklikler anında veritabanına kaydedilmektedir.
     - Panel yalnızca **admin** yetkisine sahip kullanıcılar tarafından erişilebilir.
     - Yetkilendirme, **JWT token** üzerinden sağlanmaktadır ve kullanıcı rolü kontrol edilmektedir.
+
+### Vize Sonrası
+
 - ✅ | Ana **express** dosyası parçalara bölünecek.
     - `routes` klasörüne hedefler parça parça olarak ayırıldı.
     - Değişkenler bir `config.js` dosyasına taşındı.
+- ✅ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
+    - Güncellenen veri de `date` değeri güncel tarih ile güncelleniyor.
+- ✅ | Kategoriler veritabanında varsayılan olarak belirlenecek.
+    - Varsayılan kategoriler otomatik olarak veritabanına eklenmektedir.
+    - Uygulama başlatıldığında `Category.initializeDefaults()` metodu çağrılarak varsayılan kategoriler kontrol edilir ve eksik olanlar eklenir.
+    - Eğer kategoriler mevcutsa tekrar eklenmez.
+- ✅ | Kullanıcı rolünü **JWT** yerine çerezlere şifrelenmiş olarak işlenmeli.
+    - Kullanıcı rolü, `crypto` modülü ve **Express**'in **signed cookies** özelliği kullanılarak çerezde güvenli (`signed: true`) bir şekilde tutulur.
+    - Şifreleme ve çözme işlemleri için bir `secretKey` kullanılmaktadır ve bu anahtar `.env` dosyasında saklanmaktadır.
+    - Çerez içeriği değiştirilmeye çalışıldığında sunucu tarafından imzalama kontrolü yapılır ve geçersiz sayılır.
+    - Sunucu tarafında sadece imzası geçerli olan çerezler kabul edilir böylece kullanıcı çerez değerini değiştirerek rol yükseltemez.
 - ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
-- ✅ | Gider düzenlemesi yapıldığında tarih güncellenmiyor, düzeltilecek.
-    - Güncellenen veri de `date` değeri güncel tarih ile güncelleniyor.
 - ❌ | Çoklu dil desteği eklenecek.
 - ❌ | Gönderilen e-postaları veritabanına loglama.
 - ❌ | Hataları veritabanına loglama.
----
-- ❌ | Kategorilere de alt kategoriler eklenecek.
-- ❌ | `try-catch` mantığı olmadan kullanımı araştırılacak.
+- ❌ | Kategorilere alt kategoriler eklenecek.
+- ❌ | `try-catch` mantığı olmadan kullanımı araştırılacak. (async handler?)
 - ❌ | Kullanıcılar birden fazla role sahip olabilmeli.
-- ❌ | Kullanıcı rolünü JWT yerine çerezlere şifrelenmiş olarak işlenmeli.
 
 ✅ Tamamlandı. | ⭕ Üzerinde çalışılıyor. | ❌ Tamamlanmadı.

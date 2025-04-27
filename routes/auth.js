@@ -8,7 +8,7 @@ const User = require("../models/user.js");
 // JWT oluşturma fonksiyonu
 function createToken(user) {
     return jwt.sign(
-        { id: user._id, email: user.email, role: user.role },
+        { id: user._id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: env.COOKIE_MAX_AGE }
     );
@@ -51,6 +51,8 @@ router.post("/register", async (req, res) => {
     try {
         const user = new User({ email, password: hashedPassword });
         await user.save();
+
+        res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
         res.redirect("/login");
     } catch (err) {
         res.cookie("messages", { error: "Kayıt sırasında hata oluştu." }, { httpOnly: true, maxAge });
@@ -85,12 +87,15 @@ router.post("/login", async (req, res) => {
 
     const token = createToken(user);
     res.cookie("token", token, { httpOnly: true, maxAge });
+    res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
+
     res.redirect("/dashboard");
 });
 
 // Çıkış Yap
 router.get("/logout", (req, res) => {
     res.clearCookie("token");
+    res.clearCookie("role");
     res.redirect("/");
 });
 

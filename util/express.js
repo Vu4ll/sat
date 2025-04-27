@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(expressLayouts);
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(flashMiddleware);
 app.use("/images", express.static(path.join(__dirname, "..", "views", "images")));
 app.use("/js", express.static(path.join(__dirname, "..", "views", "js")));
