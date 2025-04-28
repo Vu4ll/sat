@@ -4,11 +4,12 @@ const ms = require("ms");
 
 const env = {
     PORT: process.env.PORT || 3000,
-    APP_URL: `${process.env.APP_URL}` || `http://localhost`,
+    APP_URL: process.env.APP_URL || `http://localhost`,
     COOKIE_MAX_AGE: process.env.COOKIE_MAX_AGE || "7d",
     LOCALE: process.env.LOCALE || "tr",
     TIMEZONE: process.env.TIMEZONE || "Europe/Istanbul",
-    RESET_PASSWORD_EXPIRES: process.env.RESET_PASSWORD_EXPIRES || "1h"
+    RESET_PASSWORD_EXPIRES: process.env.RESET_PASSWORD_EXPIRES || "1h",
+    DEFAULT_CHART_COLOR: process.env.DEFAULT_CHART_COLOR ? `#${process.env.DEFAULT_CHART_COLOR}` : "#5CC593",
 };
 
 const maxAge = ms(env.COOKIE_MAX_AGE);

@@ -1,18 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../models/Category');
+const Category = require('../models/category');
 const authenticateToken = require('../middlewares/authenticateToken');
 const isAdmin = require('../middlewares/isAdmin');
+const { env } = require('../util/config.js');
 
 // Kategori yönetim paneli
 router.get('/', authenticateToken, isAdmin, async (req, res) => {
     const categories = await Category.find({});
-    res.render('category-panel', { title: "Kategori Yönetimi", user: req.user, role: req.user.role, categories });
+    res.render('category-panel', {
+        title: "Kategori Yönetimi",
+        user: req.user,
+        role: req.user.role,
+        categories,
+        color: env.DEFAULT_CHART_COLOR
+    });
 });
 
 // Yeni kategori ekleme
 router.post('/add', authenticateToken, isAdmin, async (req, res) => {
-    const { name } = req.body;
+    const { name, color } = req.body;
 
     if (!name) {
         return res.cookie('messages',
@@ -21,12 +28,14 @@ router.post('/add', authenticateToken, isAdmin, async (req, res) => {
     }
 
     try {
-        await Category.create({ name });
+        await Category.create({ name, color });
         res.redirect('/categories');
     } catch (error) {
         console.error(error);
     }
 });
+
+// Düzenleme işlemi eklenecek
 
 // Kategori silme
 router.post('/delete/:id', authenticateToken, isAdmin, async (req, res) => {

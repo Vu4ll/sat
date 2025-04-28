@@ -28,6 +28,7 @@ TIMEZONE=your_timezone # Default is Europe/Istanbul
 RESET_PASSWORD_EXPIRES=your_reset_password_expires # In hour format, default is 1h
 MAIL_USER=your_gmail
 MAIL_PASS=your_app_pass_or_password
+DEFAULT_CHART_COLOR=your_chart_color # In hex color format without #, default is 5CC593
 ```
 
 4. **Web Uygulamasını Başlatın**
@@ -90,6 +91,15 @@ MAIL_PASS=your_app_pass_or_password
     - Şifreleme ve çözme işlemleri için bir `secretKey` kullanılmaktadır ve bu anahtar `.env` dosyasında saklanmaktadır.
     - Çerez içeriği değiştirilmeye çalışıldığında sunucu tarafından imzalama kontrolü yapılır ve geçersiz sayılır.
     - Sunucu tarafında sadece imzası geçerli olan çerezler kabul edilir böylece kullanıcı çerez değerini değiştirerek rol yükseltemez.
+- ✅ | Kategorilere renk tanımlanması yapılacak.
+    - Kategori veritabanı modeline **color** değeri eklendi ve varsayılan değeri `.env` dosyası üzerinden belirlendi.
+    - Kategori yönetim paneline bir renk seçici (`<input type="color">`) eklendi.
+    - Kullanıcılar kategori eklerken bir renk seçebilir.
+    - `config.js` dosyasına `DEFAULT_CATEGORY_COLOR` değişkeni eklendi ve bu değişken kategoriye özel bir renk atanmadığında kullanılacak varsayılan rengi belirtir.
+    - Grafiklerde her kategori atanmış renklerle temsil edilir. Eğer bir kategori için renk atanmadıysa varsayılan renk kullanılır.
+    - `/api/categories` ve `/api/default-category-color` **API**'leri ile kategorilere atanmış renkler ve varsayılan renk istemciye sağlanır.
+    - Kullanıcılar kategori yönetim panelinden kategorilere özel renkler atayabilir veya mevcut renkleri düzenleyebilir.
+- ⭕ | Kategori yönetiminde düzenleme paneli eklenecek.
 - ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.

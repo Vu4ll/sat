@@ -1,23 +1,28 @@
 async function fetchExpenses() {
     try {
-        const response = await fetch("/api/expenses");
-        const expenses = await response.json();
+        const [expensesResponse, categoriesResponse, defaultColorResponse] = await Promise.all([
+            fetch("/api/expenses"),
+            fetch("/api/categories"),
+            fetch("/api/default-category-color")
+        ]);
 
-        const categories = {};
+        const expenses = await expensesResponse.json();
+        const categories = await categoriesResponse.json();
+        const { defaultColor } = await defaultColorResponse.json();
+
+        const categoryColors = categories.reduce((acc, category) => {
+            acc[category.name] = category.color;
+            return acc;
+        }, {});
+
+        const categoryData = {};
         expenses.forEach(expense => {
-            categories[expense.category] = (categories[expense.category] || 0) + expense.amount;
+            categoryData[expense.category] = (categoryData[expense.category] || 0) + expense.amount;
         });
 
-        const labels = Object.keys(categories);
-        const data = Object.values(categories);
-        const backgroundColors = [
-            "rgba(255, 99, 132, 0.7)",
-            "rgba(54, 162, 235, 0.7)",
-            "rgba(255, 206, 86, 0.7)",
-            "rgba(75, 192, 192, 0.7)",
-            "rgba(153, 102, 255, 0.7)",
-            "rgba(255, 159, 64, 0.7)"
-        ];
+        const labels = Object.keys(categoryData);
+        const data = Object.values(categoryData);
+        const backgroundColors = labels.map(label => categoryColors[label] || defaultColor);
 
         const ctx = document.getElementById("expenseChart").getContext("2d");
         new Chart(ctx, {
@@ -25,9 +30,9 @@ async function fetchExpenses() {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: "Gider Dağılımı",
+                    label: "Toplam Tutar",
                     data: data,
-                    backgroundColor: backgroundColors.slice(0, labels.length),
+                    backgroundColor: backgroundColors,
                     borderWidth: 1
                 }]
             },

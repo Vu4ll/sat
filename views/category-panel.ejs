@@ -3,13 +3,17 @@
     <br>
     <form action="/categories/add" method="POST" class="d-flex mb-4 justify-content-center">
         <input type="text" name="name" class="form-control w-25 me-2" placeholder="Yeni kategori adı">
+        <input type="color" name="color" class="form-control form-control-color me-2" value="<%= color %>">
         <button type="submit" class="btn btn-primary">Ekle</button>
     </form>
 
     <ul class="list-group w-50 mx-auto">
         <% categories.forEach(category => { %>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <%= category.name %>
+                <span class="d-flex align-items-center">
+                    <span style="display: inline-block; width: 20px; height: 20px; border-radius: 10px; background-color: <%= category.color %>; margin-right: 10px;"></span>
+                    <%= category.name %>
+                </span>
                 <form action="/categories/delete/<%= category._id %>" method="POST" onsubmit="return confirm('Silmek istediğine emin misin?');">
                     <button type="submit" class="btn btn-sm btn-danger">Sil</button>
                 </form>

@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
             return res.render("index", { title: "Ana Sayfa", user: null, role: null });
         }
 
-        res.render("index", { title: "Ana Sayfa", user, role: user.role });
+        res.render("index", { title: "Ana Sayfa", user, role: req.signedCookies.role });
     });
 });
 
