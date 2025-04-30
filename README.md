@@ -100,6 +100,7 @@ DEFAULT_CHART_COLOR=your_chart_color # In hex color format without #, default is
     - `/api/categories` ve `/api/default-category-color` **API**'leri ile kategorilere atanmış renkler ve varsayılan renk istemciye sağlanır.
     - Kullanıcılar kategori yönetim panelinden kategorilere özel renkler atayabilir veya mevcut renkleri düzenleyebilir.
 - ⭕ | Kategori yönetiminde düzenleme paneli eklenecek.
+- ❌ | Kullanıcılar da kendileri için kategoriler oluşturabilsin.
 - ❌ | Detaylı grafikler oluşturulacak.
 - ❌ | Şifre sıfırlama için **rate limit** eklenecek.
 - ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
