@@ -17,7 +17,7 @@ function createToken(user) {
 // Kayıt Sayfası
 router.get("/register", (req, res) => {
     if (req.cookies.token) return res.redirect("/dashboard");
-    res.render("register", { title: "Kayıt Ol", user: null, role: null });
+    res.render("auth/register", { title: "Kayıt Ol", user: null, role: null });
 });
 
 router.post("/register", async (req, res) => {
@@ -67,7 +67,7 @@ router.get("/login", (req, res) => {
 
     const messages = req.cookies.messages || {};
     res.clearCookie("messages");
-    res.render("login", { title: "Giriş Yap", user: req.user, role: null, messages });
+    res.render("auth/login", { title: "Giriş Yap", user: req.user, role: null, messages });
 });
 
 router.post("/login", async (req, res) => {

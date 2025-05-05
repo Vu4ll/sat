@@ -11,7 +11,7 @@ const { env, emailRegex, passwordRegex, maxAge, APP_URL_W_PORT } = require("../u
 router.get("/forgot-password", (req, res) => {
     if (req.cookies.token) return res.redirect("/dashboard");
 
-    res.render("forgot-password", { title: "Şifre Sıfırla", user: req.user, role: null });
+    res.render("password/forgot-password", { title: "Şifre Sıfırla", user: req.user, role: null });
 });
 
 router.post("/forgot-password", async (req, res) => {
@@ -62,7 +62,7 @@ router.get("/forgot-password-success", (req, res) => {
     res.clearCookie("messages");
     res.clearCookie("resetSuccess");
 
-    res.render("forgot-password-success", {
+    res.render("password/forgot-password-success", {
         title: "Şifre Sıfırlama Başarılı",
         user: req.user,
         role: null,
@@ -84,7 +84,7 @@ router.get("/reset-password", async (req, res) => {
             { httpOnly: true, maxAge }).redirect("/forgot-password");
     }
 
-    res.render("reset-password", {
+    res.render("password/reset-password", {
         title: "Yeni Şifre Belirle",
         user: req.user,
         role: null,

@@ -42,33 +42,7 @@
 </head>
 
 <body class="d-flex flex-column">
-    <nav class="navbar navbar-expand-lg navbar-dark custom-bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/"><i class="fas fa-wallet me-2"></i>Gider Takip</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <div class="form-check form-switch nav-link d-flex align-items-center">
-                            <input class="form-check-input me-2" type="checkbox" id="themeToggle">
-                            <label class="form-check-label text-white" for="themeToggle">
-                                <i class="fas fa-moon"></i>
-                            </label>
-                        </div>
-                    </li>
-                    <% if (user) { %>
-                        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-                        <% if (role === "admin") { %>
-                            <li class="nav-item"><a class="nav-link" href="/categories">Kategori Yönetimi</a></li>
-                        <% } %>
-                        <li class="nav-item"><a class="nav-link" href="/logout">Çıkış Yap</a></li>
-                    <% } else { %>
-                        <li class="nav-item"><a class="nav-link" href="/login">Giriş Yap</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/register">Kayıt Ol</a></li>
-                    <% } %>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%- include("partials/navbar") %>
 
     <div class="container mt-4 content">
         <% if (messages.error) { %>
@@ -83,23 +57,8 @@
     </div>
 
     <br><br>
-    <footer class="text-center custom-bg-dark text-white mt-auto">
-        <div class="container pt-3">
-            <section class="mb-3">
-                <a class="btn btn-link text-white btn-floating" href="https://vu4ll.com.tr/" role="button" target="_blank">
-                    <i class="fa-solid fa-link fa-2x"></i>
-                </a>
-
-                <a class="btn btn-link text-white btn-floating" href="https://vu4ll.com.tr/github" role="button" target="_blank">
-                    <i class="fab fa-github fa-2x"></i>
-                </a>
-            </section>
-        </div>
-
-        <div class="text-center text-white p-2" style="background-color: rgba(0, 0, 0, 0.2);">
-            &copy; 2025 Copyright
-        </div>
-    </footer>
+    
+    <%- include("partials/footer") %>
 
     <script>
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";

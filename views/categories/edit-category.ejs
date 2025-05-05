@@ -1,0 +1,14 @@
+<div class="container mt-2">
+    <h2 class="text-center">Kategori Düzenle</h2>
+    <form action="/admin/categories/edit/<%= category._id %>" method="POST" class="w-50 mx-auto mt-3">
+        <div class="mb-3">
+            <label class="form-label">Kategori Adı</label>
+            <input type="text" name="name" class="form-control" value="<%= category.name %>" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Kategori Rengi</label>
+            <input type="color" name="color" class="form-control form-control-color" value="<%= category.color %>">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+    </form>
+</div>

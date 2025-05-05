@@ -17,18 +17,18 @@
 3. **Değişkenleri Ayarlayın**
     - `.env` dosyası oluşturun ve gerekli değişkenleri ekleyin. Örnek `.env` dosyası:
 ```env
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-APP_URL=your_app_url # Default is http://localhost:your_port
-PORT=your_port # Default is 3000
-COOKIE_MAX_AGE=your_max_age # In day format, default is 7d
-COOKIE_SECRET=your_cookie_secret
-LOCALE=your_locale # Default is tr
-TIMEZONE=your_timezone # Default is Europe/Istanbul
-RESET_PASSWORD_EXPIRES=your_reset_password_expires # In hour format, default is 1h
-MAIL_USER=your_gmail
-MAIL_PASS=your_app_pass_or_password
-DEFAULT_CHART_COLOR=your_chart_color # In hex color format without #, default is 5CC593
+MONGO_URI=your_mongodb_uri # Required
+JWT_SECRET=your_jwt_secret # Required
+APP_URL=your_app_url # Optional, default is http://localhost
+PORT=your_port # Optional, default is 3000
+COOKIE_MAX_AGE=your_max_age # Optional, in day format, default is 7d
+COOKIE_SECRET=your_cookie_secret # Required
+LOCALE=your_locale # Optional, default is tr
+TIMEZONE=your_timezone # Optional, default is Europe/Istanbul
+RESET_PASSWORD_EXPIRES=your_reset_password_expires # Optional, in hour format, default is 1h
+MAIL_USER=your_gmail # Required
+MAIL_PASS=your_app_pass_or_password # Required
+DEFAULT_CHART_COLOR=your_chart_color # Optional, in hex color format without #, default is 5CC593
 ```
 
 4. **Web Uygulamasını Başlatın**
@@ -99,16 +99,23 @@ DEFAULT_CHART_COLOR=your_chart_color # In hex color format without #, default is
     - Grafiklerde her kategori atanmış renklerle temsil edilir. Eğer bir kategori için renk atanmadıysa varsayılan renk kullanılır.
     - `/api/categories` ve `/api/default-category-color` **API**'leri ile kategorilere atanmış renkler ve varsayılan renk istemciye sağlanır.
     - Kullanıcılar kategori yönetim panelinden kategorilere özel renkler atayabilir veya mevcut renkleri düzenleyebilir.
-- ⭕ | Kategori yönetiminde düzenleme paneli eklenecek.
-- ❌ | Kullanıcılar da kendileri için kategoriler oluşturabilsin.
-- ❌ | Detaylı grafikler oluşturulacak.
-- ❌ | Şifre sıfırlama için **rate limit** eklenecek.
-- ❌ | `bcrypt.hash()` metodunda `salting` yapılacak.
-- ❌ | Çoklu dil desteği eklenecek.
-- ❌ | Gönderilen e-postaları veritabanına loglama.
-- ❌ | Hataları veritabanına loglama.
-- ❌ | Kategorilere alt kategoriler eklenecek.
-- ❌ | `try-catch` mantığı olmadan kullanımı araştırılacak. (async handler?)
-- ❌ | Kullanıcılar birden fazla role sahip olabilmeli.
+- ✅ | Kategori yönetiminde düzenleme paneli eklenecek.
+    - Kategori yönetimi `/categories` olan hedefi `/admin/categories` olarak değiştirildi ve admin klasörüne taşındı.
+    - `/admin/categories/edit/:id` için **GET** ve **POST** hedefleri eklendi.
+    - Düzenleme işlemleri için yeni bir form sayfası oluşturuldu.
+- ✅ | `views` klasörü parçalara ayrılacak.
+    - **EJS** dosyalarını kolay bulabilmek adına klasörlere ayrıştırıldı.
+    - `layout.ejs` içerisindeki **navbar** ve **footer** `partials` klasörüne taşındı.
+- ✖️ | `bcrypt.hash()` metodunda `salting` yapılacak.
+- ✖️ | Şifre sıfırlama için **rate limit** eklenecek.
+- ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
+- ✖️ | Kategorilere alt kategoriler eklenecek.
+- ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
+- ✖️ | Detaylı grafikler oluşturulacak.
+- ✖️ | Gönderilen e-postaları veritabanına loglama.
+- ✖️ | Hataları veritabanına loglama.
+- ✖️ | Dashboard da giderlerin sayfalanması.
+- ✖️ | `try-catch` mantığı olmadan kullanımı araştırılacak. (async handler?)
+- ✖️ | Çoklu dil desteği eklenecek.
 
-✅ Tamamlandı. | ⭕ Üzerinde çalışılıyor. | ❌ Tamamlanmadı.
+✅ Tamamlandı. | ⭕ Üzerinde çalışılıyor. | ✖️ Tamamlanmadı.
