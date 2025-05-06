@@ -1,6 +1,8 @@
 # Sistem Analizi ve Tasarımı
 **Sistem Analizi ve Tasarımı** dersi için **Gider Takip Sistemi** projesidir.
 
+Projenin canlı **demo** sürümüne [buradan](https://gidertakip.vu4ll.com.tr/) erişebilirsiniz.
+
 ## Başlamadan Önce
 - Bu proje **Node.js v18** ve üzeri sürümleri içindir.
 - Proje de veritabanı olarak **MongoDB** kullanılmıştır ve bir **MongoDB** veritabanına sahip olmalısınız.
