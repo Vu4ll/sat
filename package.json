@@ -1,6 +1,6 @@
 {
   "name": "gider-takip-projesi",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
   "license": "ISC",
   "description": "Sistem Analizi ve Tasarımı dersi için geliştirilen proje.",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
+    "argon2": "^0.43.0",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

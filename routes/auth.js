@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
+const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const { env, emailRegex, passwordRegex, maxAge } = require("../util/config");
 const User = require("../models/user.js");
@@ -22,7 +22,6 @@ router.get("/register", (req, res) => {
 
 router.post("/register", async (req, res) => {
     const { email, password, confirmPassword } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     if (!emailRegex.test(email)) {
         return res.cookie("messages",
@@ -49,6 +48,12 @@ router.post("/register", async (req, res) => {
     }
 
     try {
+        const hashedPassword = await argon2.hash(password, {
+            type: argon2.argon2id,
+            memoryCost: 2 ** 16,
+            timeCost: 3,
+            parallelism: 1
+        });
         const user = new User({ email, password: hashedPassword });
         await user.save();
 
@@ -79,17 +84,23 @@ router.post("/login", async (req, res) => {
         return res.redirect("/login");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        res.cookie("messages", { error: "Hatalı şifre girdiniz." }, { httpOnly: true, maxAge });
-        return res.redirect("/login");
+    try {
+        const isMatch = await argon2.verify(user.password, password);
+        if (!isMatch) {
+            res.cookie("messages", { error: "Hatalı şifre girdiniz." }, { httpOnly: true, maxAge });
+            return res.redirect("/login");
+        }
+
+        const token = createToken(user);
+        res.cookie("token", token, { httpOnly: true, maxAge });
+        res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
+
+        res.redirect("/dashboard");
+    } catch (err) {
+        console.error("Şifre doğrulama sırasında hata oluştu:", err);
+        res.cookie("messages", { error: "Bir hata oluştu. Lütfen tekrar deneyin." }, { httpOnly: true, maxAge });
+        res.status(500).redirect("/login");
     }
-
-    const token = createToken(user);
-    res.cookie("token", token, { httpOnly: true, maxAge });
-    res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
-
-    res.redirect("/dashboard");
 });
 
 // Çıkış Yap

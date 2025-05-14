@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
+const argon2 = require("argon2");
 const User = require("../models/user.js");
 const sendPasswordResetEmail = require("../util/mail");
 const ms = require("ms");
@@ -119,13 +119,19 @@ router.post("/reset-password", async (req, res) => {
                 { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
         }
 
-        if (await bcrypt.compare(newPassword, user.password)) {
+        const isSamePassword = await argon2.verify(user.password, newPassword);
+        if (isSamePassword) {
             return res.cookie("messages",
                 { error: "Yeni şifre, eski şifre ile aynı olamaz!" },
                 { httpOnly: true, maxAge }).redirect(`/reset-password?token=${token}`);
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const hashedPassword = await argon2.hash(newPassword, {
+            type: argon2.argon2id,
+            memoryCost: 2 ** 16,
+            timeCost: 3,
+            parallelism: 1
+        });
         user.password = hashedPassword;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;

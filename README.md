@@ -108,7 +108,11 @@ DEFAULT_CHART_COLOR=your_chart_color # Optional, in hex color format without #, 
 - ✅ | `views` klasörü parçalara ayrılacak.
     - **EJS** dosyalarını kolay bulabilmek adına klasörlere ayrıştırıldı.
     - `layout.ejs` içerisindeki **navbar** ve **footer** `partials` klasörüne taşındı.
-- ✖️ | `bcrypt.hash()` metodunda `salting` yapılacak.
+- ✅ | `bcrypt.hash()` metodunda `salting` yapılacak.
+    - `bcryptjs` kütüphanesinden `argon2` kütüphanesine geçildi.
+    - **Kayıt olma**, **giriş yapma** ve **şifre sıfırlamadaki** şifreleme ve doğrulama işlemleri `argon2` kütüphanesine uygun bir şekilde değiştirildi.
+    - Şifreleme algoritması **Avrupa Birliği** standartlarına uygun hale getirildi.
+    - `bcryptjs` kütüphanesi projeden kaldıırldı.
 - ✖️ | Şifre sıfırlama için **rate limit** eklenecek.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
