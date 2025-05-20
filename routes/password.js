@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const router = express.Router();
 const crypto = require("crypto");
 const argon2 = require("argon2");
@@ -7,6 +8,20 @@ const sendPasswordResetEmail = require("../util/mail");
 const ms = require("ms");
 const { env, emailRegex, passwordRegex, maxAge, APP_URL_W_PORT } = require("../util/config");
 
+const forgotPasswordLimiter = rateLimit({
+    windowMs: ms(env.PASSWORD_RESET_RATE_LIMIT),
+    max: env.PASSWORD_RESET_MAX_ATTEMPT,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+        res.cookie("messages",
+            { error: "Çok fazla şifre sıfırlama isteği gönderdiniz. Lütfen daha sonra tekrar deneyin." },
+            { httpOnly: true, maxAge }
+        );
+        return res.redirect("/forgot-password");
+    }
+});
+
 // Şifre sıfırlama formu
 router.get("/forgot-password", (req, res) => {
     if (req.cookies.token) return res.redirect("/dashboard");
@@ -14,7 +29,7 @@ router.get("/forgot-password", (req, res) => {
     res.render("password/forgot-password", { title: "Şifre Sıfırla", user: req.user, role: null });
 });
 
-router.post("/forgot-password", async (req, res) => {
+router.post("/forgot-password", forgotPasswordLimiter, async (req, res) => {
     const { email } = req.body;
 
     try {

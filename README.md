@@ -31,6 +31,8 @@ RESET_PASSWORD_EXPIRES=your_reset_password_expires # Optional, in hour format, d
 MAIL_USER=your_gmail # Required
 MAIL_PASS=your_app_pass_or_password # Required
 DEFAULT_CHART_COLOR=your_chart_color # Optional, in hex color format without #, default is 5CC593
+PASSWORD_RESET_RATE_LIMIT=your_rate_limit # Optional, in minute format, default is 15m
+PASSWORD_RESET_MAX_ATTEMPT= # Optional, default is 3
 ```
 
 4. **Web Uygulamasını Başlatın**
@@ -113,7 +115,11 @@ DEFAULT_CHART_COLOR=your_chart_color # Optional, in hex color format without #, 
     - **Kayıt olma**, **giriş yapma** ve **şifre sıfırlamadaki** şifreleme ve doğrulama işlemleri `argon2` kütüphanesine uygun bir şekilde değiştirildi.
     - Şifreleme algoritması **Avrupa Birliği** standartlarına uygun hale getirildi.
     - `bcryptjs` kütüphanesi projeden kaldıırldı.
-- ✖️ | Şifre sıfırlama için **rate limit** eklenecek.
+- ✅ | Şifre sıfırlama için **rate limit** eklenecek.
+    - `express-rate-limit` kütühanesi kuruldu.
+    - `routes/password.js` içerisinde **rate limit** için bir **middleware** oluşturuldu.
+    - Bu **middleware** 15 dakika içerisinde üçten fazla deneme yapılırsa bu süre içerisinde daha fazla denemeye izin verilmiyor.
+    - `.env` dosyasına `PASSWORD_RESET_RATE_LIMIT` ve `PASSWORD_RESET_MAX_ATTEMPT` değişkenleri tanımlandı ve varsayılan değerleri `util/config.js` içerisinde belirtildi. 
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.

@@ -10,6 +10,8 @@ const env = {
     TIMEZONE: process.env.TIMEZONE || "Europe/Istanbul",
     RESET_PASSWORD_EXPIRES: process.env.RESET_PASSWORD_EXPIRES || "1h",
     DEFAULT_CHART_COLOR: process.env.DEFAULT_CHART_COLOR ? `#${process.env.DEFAULT_CHART_COLOR}` : "#5CC593",
+    PASSWORD_RESET_RATE_LIMIT: process.env.PASSWORD_RESET_RATE_LIMIT || "15m",
+    PASSWORD_RESET_MAX_ATTEMPT: process.env.PASSWORD_RESET_MAX_ATTEMPT || 3,
 };
 
 const maxAge = ms(env.COOKIE_MAX_AGE);
