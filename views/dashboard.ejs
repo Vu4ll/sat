@@ -4,6 +4,11 @@
         width: 60%;
         margin: 0 auto;
     }
+
+    .pagination .page-item.disabled .page-link {
+        cursor: not-allowed !important;
+        pointer-events: auto;
+    }
 </style>
 
 <div class="container">
@@ -40,4 +45,36 @@
             <% }) %>
         </tbody>
     </table>
+
+    <% if (typeof page !== "undefined" && typeof totalPages !== "undefined" && totalPages > 1) { %>
+        <nav aria-label="Giderler Sayfalama">
+            <ul class="pagination justify-content-center">
+                <!-- İlk sayfa butonu -->
+                <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/dashboard?page=1"><i class="fa-solid fa-backward"></i></a>
+                </li>
+
+                <!-- Önceki sayfa butonu -->
+                <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/dashboard?page=<%= page - 1 %>"><i class="fa-solid fa-arrow-left"></i></i></a>
+                </li>
+
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= page === i ? 'active' : '' %>">
+                        <a class="page-link" href="/dashboard?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+
+                <!-- Sonraki sayfa butonu -->
+                <li class="page-item <%= page === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/dashboard?page=<%= page + 1 %>"><i class="fa-solid fa-arrow-right"></i></i></a>
+                </li>
+                
+                <!-- Son sayfa butonu -->
+                <li class="page-item <%= page === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/dashboard?page=<%= totalPages %>"><i class="fa-solid fa-forward"></i></a>
+                </li>
+            </ul>
+        </nav>
+    <% } %>
 </div>

@@ -32,7 +32,7 @@ MAIL_USER=your_gmail # Required
 MAIL_PASS=your_app_pass_or_password # Required
 DEFAULT_CHART_COLOR=your_chart_color # Optional, in hex color format without #, default is 5CC593
 PASSWORD_RESET_RATE_LIMIT=your_rate_limit # Optional, in minute format, default is 15m
-PASSWORD_RESET_MAX_ATTEMPT= # Optional, default is 3
+PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
 ```
 
 4. **Web Uygulamasını Başlatın**
@@ -120,13 +120,18 @@ PASSWORD_RESET_MAX_ATTEMPT= # Optional, default is 3
     - `routes/password.js` içerisinde **rate limit** için bir **middleware** oluşturuldu.
     - Bu **middleware** 15 dakika içerisinde üçten fazla deneme yapılırsa bu süre içerisinde daha fazla denemeye izin verilmiyor.
     - `.env` dosyasına `PASSWORD_RESET_RATE_LIMIT` ve `PASSWORD_RESET_MAX_ATTEMPT` değişkenleri tanımlandı ve varsayılan değerleri `util/config.js` içerisinde belirtildi. 
+- ✅ | Dashboard'da giderlerin sayfalanması.
+    - Kullanıcının giderleri sayfa başına **10 kayıt** olacak şekilde listelenmektedir.
+    - **Backend**'de toplam gider sayısına göre toplam sayfa sayısı hesaplanmakta ve ilgili sayfa için veriler `skip` ve `limit` ile çekilmektedir.
+    - **Frontend**'de sayfa numaraları, **İlk**, **Önceki**, **Sonraki** ve **Son** butonları ile kullanıcı farklı sayfalara geçiş yapabilmektedir.
+    - Aktif sayfa vurgulanmakta ve geçerli olmayan butonlar devre dışı bırakılmaktadır.
+    - Eğer kullanıcı giderleri yalnızca 1 sayfadan oluşuyorsa sayfalama bileşeni gösterilmemektedir.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
 - ✖️ | Detaylı grafikler oluşturulacak.
 - ✖️ | Gönderilen e-postaları veritabanına loglama.
 - ✖️ | Hataları veritabanına loglama.
-- ✖️ | Dashboard da giderlerin sayfalanması.
 - ✖️ | `try-catch` mantığı olmadan kullanımı araştırılacak. (async handler?)
 - ✖️ | Çoklu dil desteği eklenecek.
 

@@ -29,20 +29,31 @@ router.get("/dashboard", authenticateToken, async (req, res) => {
     moment.locale(userLocale);
 
     const userTimeZone = req.cookies.timezone ? req.cookies.timezone : env.TIMEZONE;
-    const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
+
+    const page = parseInt(req.query.page) > 0 ? parseInt(req.query.page) : 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalExpenses = await Expense.countDocuments({ userId: req.user.id });
+    const totalPages = Math.ceil(totalExpenses / limit);
+
+    const expenses = await Expense.find({ userId: req.user.id })
+        .sort({ date: -1 })
+        .skip(skip)
+        .limit(limit);
 
     const formattedExpenses = expenses.map(expense => ({
         ...expense._doc,
-        date: moment(expense.date).tz(userTimeZone).format("LLL") // DD.MM.YYYY HH:mm
+        date: moment(expense.date).tz(userTimeZone).format("LLL")
     }));
-    // console.log(expenses, formattedExpenses);
 
     res.render("dashboard", {
         title: "Dashboard",
         user: req.user,
         role: req.user.role,
         expenses: formattedExpenses,
-        locale: userLocale
+        locale: userLocale,
+        page,
+        totalPages
     });
 });
 
