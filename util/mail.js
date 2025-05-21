@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const emailLog = require("../models/emailLog");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -30,8 +31,21 @@ const sendPasswordResetEmail = async (email, resetLink) => {
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log("E-posta gönderildi: ", info.response);
+
+        await emailLog.create({
+            to: email,
+            subject: mailOptions.subject,
+            status: "success"
+        });
     } catch (error) {
         console.error("E-posta gönderme hatası: ", error);
+
+        await emailLog.create({
+            to: email,
+            subject: mailOptions.subject,
+            status: "failure",
+            error: error.message
+        });
     }
 };
 

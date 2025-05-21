@@ -8,7 +8,7 @@ const { env } = require("../../util/config.js");
 // Kategori yönetim paneli
 router.get("/", authenticateToken, isAdmin, async (req, res) => {
     const categories = await Category.find({});
-    res.render("categories/category-panel", {
+    res.render("admin/categories/category-panel", {
         title: "Kategori Yönetimi",
         user: req.user,
         role: req.user.role,
@@ -46,7 +46,7 @@ router.get("/edit/:id", authenticateToken, isAdmin, async (req, res) => {
                 { httpOnly: true }).redirect("/admin/categories");
         }
 
-        res.render("categories/edit-category", {
+        res.render("admin/categories/edit-category", {
             title: "Kategori Düzenle",
             user: req.user,
             role: req.user.role,

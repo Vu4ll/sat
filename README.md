@@ -126,11 +126,16 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - **Frontend**'de sayfa numaraları, **İlk**, **Önceki**, **Sonraki** ve **Son** butonları ile kullanıcı farklı sayfalara geçiş yapabilmektedir.
     - Aktif sayfa vurgulanmakta ve geçerli olmayan butonlar devre dışı bırakılmaktadır.
     - Eğer kullanıcı giderleri yalnızca 1 sayfadan oluşuyorsa sayfalama bileşeni gösterilmemektedir.
+- ✅ | Gönderilen e-postaları veritabanına loglama.
+    - `models/emailLog.js` adında yeni bir veritabanı modeli oluşturuldu.
+    - **E-posta alıcısı**, **konusu**, **gönderim durumu** (başarılı/başarısız) ve **hata mesajı** gibi bilgiler kaydedilmektedir.
+    - `util/mail.js` içerisinde gönderilen e-postaların kayıtları oluşturulmaktadır.
+    - E-posta gönderimi **başarılı** olduğunda gönderim bilgileri **success** durumu ile loglanmaktadır.
+    - E-posta gönderimi **başarısız** olduğunda hata mesajı ile birlikte **failure** durumu loglanmaktadır.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
 - ✖️ | Detaylı grafikler oluşturulacak.
-- ✖️ | Gönderilen e-postaları veritabanına loglama.
 - ✖️ | Hataları veritabanına loglama.
 - ✖️ | `try-catch` mantığı olmadan kullanımı araştırılacak. (async handler?)
 - ✖️ | Çoklu dil desteği eklenecek.

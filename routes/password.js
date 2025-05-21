@@ -52,7 +52,7 @@ router.post("/forgot-password", forgotPasswordLimiter, async (req, res) => {
         await user.save();
 
         const resetLink = `${APP_URL_W_PORT}/reset-password?token=${token}`;
-        // BURAYI UNUTMA //
+
         await sendPasswordResetEmail(email, resetLink);
         console.log(email, resetLink);
 
