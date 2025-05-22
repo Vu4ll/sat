@@ -17,6 +17,6 @@ const env = {
 const maxAge = ms(env.COOKIE_MAX_AGE);
 const APP_URL_W_PORT = env.PORT == 80 || env.PORT == 443 ? env.APP_URL : `${env.APP_URL}:${env.PORT}`
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 module.exports = { env, maxAge, APP_URL_W_PORT, emailRegex, passwordRegex };

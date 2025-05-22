@@ -7,7 +7,13 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Şifre</label>
-            <input type="password" name="password" class="form-control" placeholder="Şifrenizi giriniz" required>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Şifrenizi giriniz" required>
+            <ul id="password-criteria" class="list-unstyled mt-2" style="display: none;">
+                <li id="lowercase" class="text-danger"><i class="fa-solid fa-xmark"></i> En az bir küçük harf</li>
+                <li id="uppercase" class="text-danger"><i class="fa-solid fa-xmark"></i> En az bir büyük harf</li>
+                <li id="number" class="text-danger"><i class="fa-solid fa-xmark"></i> En az bir sayı</li>
+                <li id="length" class="text-danger"><i class="fa-solid fa-xmark"></i> En az 8 karakter</li>
+            </ul>
         </div>
         <div class="mb-3">
             <label class="form-label">Şifre tekrar</label>
@@ -23,3 +29,61 @@
         </p>
     </div>
 </div>
+
+<script>
+    const passwordInput = document.getElementById('password');
+    const passwordCriteria = document.getElementById('password-criteria');
+    const lowercaseCheck = document.getElementById('lowercase');
+    const uppercaseCheck = document.getElementById('uppercase');
+    const numberCheck = document.getElementById('number');
+    const lengthCheck = document.getElementById('length');
+
+    // Kriter metinlerini sakla
+    const texts = {
+        lowercase: "En az bir küçük harf",
+        uppercase: "En az bir büyük harf",
+        number: "En az bir sayı",
+        length: "En az 8 karakter"
+    };
+
+    passwordInput.addEventListener('focus', function () {
+        passwordCriteria.style.display = 'block';
+    });
+
+    passwordInput.addEventListener('blur', function () {
+        passwordCriteria.style.display = 'none';
+    });
+
+    passwordInput.addEventListener('input', function () {
+        const password = passwordInput.value;
+
+        // Regexler
+        const lowercaseRegex = /[a-z]/;
+        const uppercaseRegex = /[A-Z]/;
+        const numberRegex = /[0-9]/;
+
+        // Kontroller
+        const hasLowercase = lowercaseRegex.test(password);
+        const hasUppercase = uppercaseRegex.test(password);
+        const hasNumber = numberRegex.test(password);
+        const hasLength = password.length >= 8;
+
+        // İkonları güncelle
+        updateIcon(lowercaseCheck, hasLowercase, texts.lowercase);
+        updateIcon(uppercaseCheck, hasUppercase, texts.uppercase);
+        updateIcon(numberCheck, hasNumber, texts.number);
+        updateIcon(lengthCheck, hasLength, texts.length);
+    });
+
+    function updateIcon(element, isValid, text) {
+        if (isValid) {
+            element.classList.remove('text-danger');
+            element.classList.add('text-success');
+            element.innerHTML = '<i class="fa-solid fa-check"></i> ' + text;
+        } else {
+            element.classList.remove('text-success');
+            element.classList.add('text-danger');
+            element.innerHTML = '<i class="fa-solid fa-xmark"></i> ' + text;
+        }
+    }
+</script>
