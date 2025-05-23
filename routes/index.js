@@ -7,5 +7,6 @@ router.use("/", require("./password"));
 router.use("/api", require("./api"));
 router.use("/admin/categories", require("./admin/category"));
 router.use("/expenses", require("./expense"));
+router.use("/export", require("./export"));
 
 module.exports = router;

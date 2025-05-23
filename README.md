@@ -132,6 +132,16 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - `util/mail.js` içerisinde gönderilen e-postaların kayıtları oluşturulmaktadır.
     - E-posta gönderimi **başarılı** olduğunda gönderim bilgileri **success** durumu ile loglanmaktadır.
     - E-posta gönderimi **başarısız** olduğunda hata mesajı ile birlikte **failure** durumu loglanmaktadır.
+- ✅ | NoSQL Injection koruması eklenecek.
+    - `express-mongo-sanitize` kütüphanesi kuruldu ve **NoSQL Injection** koruması sağlandı.
+    - `req.params` üzerinden gelen **ID**'lerin geçerli bir **MongoDB ObjectId** olduğunun kontrolleri sağlandı.
+- ✅ | Giderler dosya olarak dışa aktarılmalı.
+    - Kullanıcıların giderlerini **Excel**, **PDF** ve **CSV** formatlarında dışa aktarması sağlandı.
+    - **ExcelJS** kütüphanesi kullanılarak giderler bir **Excel** dosyasına yazılmakta ve kullanıcıya indirilebilir şekilde sunulmaktadır.
+    - **PDFKit** kütüphanesi ile giderler yazdırılabilir bir PDF raporu olarak oluşturulmaktadır. Türkçe karakter desteği için özel font kullanılmıştır.
+    - **csv-writer** kütüphanesi ile giderler bir CSV dosyasına dönüştürülmekte ve geçici dosya olarak oluşturulup indirme işlemi tamamlandıktan sonra silinmektedir.
+    - Her format için dosya adlandırma standardı uygulanmıştır (`giderler_YYYY-MM-DD.uzantı`).
+    - Kullanıcıların yalnızca kendi giderlerini dışa aktarabilmektedir.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
