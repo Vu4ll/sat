@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Expense = require("../models/expense");
 const Category = require("../models/category");
 const authenticateToken = require("../middlewares/authenticateToken");
@@ -39,6 +40,12 @@ router.post("/add", authenticateToken, async (req, res) => {
 
 // Gider silme
 router.get("/delete/:id", authenticateToken, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz gider ID!" },
+            { httpOnly: true }).redirect(`/dashboard`);
+    }
+
     try {
         await Expense.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
         res.redirect("/dashboard");
@@ -50,6 +57,12 @@ router.get("/delete/:id", authenticateToken, async (req, res) => {
 
 // Gider düzenleme form
 router.get("/edit/:id", authenticateToken, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz gider ID!" },
+            { httpOnly: true }).redirect(`/dashboard`);
+    }
+
     try {
         const expense = await Expense.findOne({ _id: req.params.id, userId: req.user.id });
         const categories = await Category.find();
@@ -64,6 +77,12 @@ router.get("/edit/:id", authenticateToken, async (req, res) => {
 // Gider güncelleme
 router.post("/edit/:id", authenticateToken, async (req, res) => {
     const { category, amount, description } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz gider ID!" },
+            { httpOnly: true }).redirect(`/dashboard`);
+    }
 
     try {
         await Expense.findOneAndUpdate(

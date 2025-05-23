@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Category = require("../../models/category.js");
 const authenticateToken = require("../../middlewares/authenticateToken.js");
 const isAdmin = require("../../middlewares/isAdmin.js");
@@ -37,6 +38,12 @@ router.post("/add", authenticateToken, isAdmin, async (req, res) => {
 
 // Kategori düzenleme formu
 router.get("/edit/:id", authenticateToken, isAdmin, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz kategori ID!" },
+            { httpOnly: true }).redirect(`/admin/categories`);
+    }
+
     try {
         const category = await Category.findById(req.params.id);
 
@@ -62,6 +69,12 @@ router.get("/edit/:id", authenticateToken, isAdmin, async (req, res) => {
 router.post("/edit/:id", authenticateToken, isAdmin, async (req, res) => {
     const { name, color } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz kategori ID!" },
+            { httpOnly: true }).redirect(`/admin/categories`);
+    }
+
     if (!name) {
         return res.cookie("messages",
             { error: "Kategori adı boş olamaz!" },
@@ -79,6 +92,12 @@ router.post("/edit/:id", authenticateToken, isAdmin, async (req, res) => {
 
 // Kategori silme
 router.post("/delete/:id", authenticateToken, isAdmin, async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.cookie("messages",
+            { error: "Geçersiz kategori ID!" },
+            { httpOnly: true }).redirect(`/admin/categories`);
+    }
+
     await Category.findByIdAndDelete(req.params.id);
     res.redirect("/admin/categories");
 });
