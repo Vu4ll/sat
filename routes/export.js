@@ -189,7 +189,10 @@ router.get("/json", authenticateToken, async (req, res) => {
         res.status(200).json(expenses);
     } catch (error) {
         console.error("JSON export hatası:", error);
-        res.status(500).send("JSON dosyası oluşturulurken hata oluştu.");
+        res.status(500);
+        res.cookie("messages",
+            { error: "JSON dosyası oluşturulurken hata oluştu." },
+            { httpOnly: true }).redirect("/dashboard");
     }
 });
 

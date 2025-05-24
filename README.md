@@ -3,6 +3,32 @@
 
 Projenin canlı **demo** sürümüne [buradan](https://gidertakip.vu4ll.com.tr/) erişebilirsiniz.
 
+## Kullanılan Teknolojiler
+Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
+
+### Backend
+- **Node.js**: Sunucu tarafında JavaScript çalıştırmak için kullanılan platform.
+- **Express.js**: Web uygulamaları ve API geliştirmek için kullanılan minimal ve esnek bir Node.js framework'ü.
+- **Mongoose**: MongoDB ile etkileşim kurmak için kullanılan bir ODM (Object Data Modeling) kütüphanesi.
+- **argon2**: Şifreleme ve doğrulama işlemleri için kullanılan güçlü bir şifreleme algoritması.
+- **jsonwebtoken (JWT)**: Kullanıcı kimlik doğrulama ve yetkilendirme için kullanılan token tabanlı bir çözüm.
+- **express-rate-limit**: Şifre sıfırlama gibi işlemler için istek sınırlandırma.
+- **express-mongo-sanitize**: NoSQL Injection saldırılarına karşı koruma sağlamak için kullanılan middleware.
+- **nodemailer**: E-posta gönderimi için kullanılan kütüphane.
+
+### Frontend
+- **EJS (Embedded JavaScript)**: Dinamik HTML şablonları oluşturmak için kullanılan bir şablon motoru.
+- **Bootstrap 5**: Kullanıcı arayüzü tasarımı için kullanılan CSS framework'ü.
+- **Chart.js**: Giderlerin görselleştirilmesi için kullanılan grafik kütüphanesi.
+- **Font Awesome**: İkonlar için kullanılan bir kütüphane.
+
+### Diğer
+- **ExcelJS**: Giderleri Excel formatında dışa aktarmak için kullanılan kütüphane.
+- **PDFKit**: Giderleri PDF formatında dışa aktarmak için kullanılan kütüphane.
+- **csv-writer**: Giderleri CSV formatında dışa aktarmak için kullanılan kütüphane.
+- **moment-timezone**: Tarih ve saat işlemleri için kullanılan kütüphane.
+- **ms**: Süreleri kolayca işlemek için kullanılan bir yardımcı kütüphane.
+
 ## Başlamadan Önce
 - Bu proje **Node.js v18** ve üzeri sürümleri içindir.
 - Proje de veritabanı olarak **MongoDB** kullanılmıştır ve bir **MongoDB** veritabanına sahip olmalısınız.
