@@ -180,4 +180,17 @@ router.get("/csv", authenticateToken, async (req, res) => {
     }
 });
 
+router.get("/json", authenticateToken, async (req, res) => {
+    try {
+        const expenses = await Expense.find({ userId: req.user.id }).sort({ date: -1 });
+
+        res.setHeader("Content-Type", "application/json");
+        res.setHeader("Content-Disposition", `attachment; filename=giderler_${moment().format("YYYY-MM-DD")}.json`);
+        res.status(200).json(expenses);
+    } catch (error) {
+        console.error("JSON export hatası:", error);
+        res.status(500).send("JSON dosyası oluşturulurken hata oluştu.");
+    }
+});
+
 module.exports = router;

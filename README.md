@@ -140,8 +140,9 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - **ExcelJS** kütüphanesi kullanılarak giderler bir **Excel** dosyasına yazılmakta ve kullanıcıya indirilebilir şekilde sunulmaktadır.
     - **PDFKit** kütüphanesi ile giderler yazdırılabilir bir PDF raporu olarak oluşturulmaktadır. Türkçe karakter desteği için özel font kullanılmıştır.
     - **csv-writer** kütüphanesi ile giderler bir CSV dosyasına dönüştürülmekte ve geçici dosya olarak oluşturulup indirme işlemi tamamlandıktan sonra silinmektedir.
+    - Kullanıcıların giderlerini **JSON** formatında dışa aktarması sağlandı.
     - Her format için dosya adlandırma standardı uygulanmıştır (`giderler_YYYY-MM-DD.uzantı`).
-    - Kullanıcıların yalnızca kendi giderlerini dışa aktarabilmektedir.
+    - Kullanıcılar yalnızca kendi giderlerini dışa aktarabilmektedir.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
