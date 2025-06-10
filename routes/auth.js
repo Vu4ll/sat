@@ -4,6 +4,7 @@ const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const { env, emailRegex, passwordRegex, maxAge } = require("../util/config");
 const User = require("../models/user.js");
+const AuthLog = require("../models/authLog.js");
 
 // JWT oluşturma fonksiyonu
 function createToken(user) {
@@ -57,9 +58,27 @@ router.post("/register", async (req, res) => {
         const user = new User({ email, password: hashedPassword });
         await user.save();
 
+        await AuthLog.create({
+            userId: user._id,
+            ipAddress: req.ip,
+            action: "register",
+            status: "success",
+            details: "Kullanıcı başarıyla kaydedildi.",
+            createdAt: new Date()
+        });
+
         res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
         res.redirect("/login");
     } catch (err) {
+        await AuthLog.create({
+            userId: null,
+            ipAddress: req.ip,
+            action: "register",
+            status: "fail",
+            details: err.message,
+            createdAt: new Date()
+        });
+
         res.cookie("messages", { error: "Kayıt sırasında hata oluştu." }, { httpOnly: true, maxAge });
         res.status(500).send("Hata oluştu.");
         console.error(err);
@@ -96,6 +115,15 @@ router.post("/login", async (req, res) => {
         res.cookie("role", user.role, { httpOnly: true, signed: true, maxAge });
 
         res.redirect("/dashboard");
+
+        await AuthLog.create({
+            userId: user._id,
+            ipAddress: req.ip,
+            action: "login",
+            status: "success",
+            details: "Kullanıcı başarıyla giriş yaptı.",
+            createdAt: new Date()
+        });
     } catch (err) {
         console.error("Şifre doğrulama sırasında hata oluştu:", err);
         res.cookie("messages", { error: "Bir hata oluştu. Lütfen tekrar deneyin." }, { httpOnly: true, maxAge });
@@ -104,7 +132,16 @@ router.post("/login", async (req, res) => {
 });
 
 // Çıkış Yap
-router.get("/logout", (req, res) => {
+router.get("/logout", async (req, res) => {
+    await AuthLog.create({
+        userId: req.user ? req.user.id : null,
+        ipAddress: req.ip,
+        action: "logout",
+        status: "success",
+        details: "Kullanıcı başarıyla çıkış yaptı.",
+        createdAt: new Date()
+    });
+    
     res.clearCookie("token");
     res.clearCookie("role");
     res.redirect("/");

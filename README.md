@@ -169,6 +169,14 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - Kullanıcıların giderlerini **JSON** formatında dışa aktarması sağlandı.
     - Her format için dosya adlandırma standardı uygulanmıştır (`giderler_YYYY-MM-DD.uzantı`).
     - Kullanıcılar yalnızca kendi giderlerini dışa aktarabilmektedir.
+- ✅ | Kayıt olan kullanıcılar log tutulacak.
+    - `models/authLog.js` adında bir veritabanı modeli oluşturuldu.
+    - Kullanıcı kayıt işlemlerinde başarılı veya başarısız her deneme için log kaydı eklenmektedir.
+    - Loglarda **kullanıcı ID'si**, **IP adresi**, **işlem türü** (register), **durum** (success/fail) ve **detay** bilgileri tutulmaktadır.
+    - Kayıt işlemi başarılı olduğunda "Kullanıcı başarıyla kaydedildi." mesajı ile loglanır.
+    - Kayıt sırasında hata oluşursa hata mesajı ile birlikte log kaydı oluşturulur.
+    - Ayrıcı kullanıcıların **giriş**, **çıkış** ve **şifre sıfırlama** işlemleri de aynı **kayıt işlemlerinde** olduğu gibi log kaydı alınmaktadır.
+    - Bu sayede kullanıcı kayıt işlemleri izlenebilir ve olası hatalar kolayca tespit edilebilir.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
