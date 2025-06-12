@@ -1,6 +1,6 @@
 <div class="container">
     <h2 class="text-center">Giriş Yap</h2>
-    <form action="/login" method="post" class="w-50 mx-auto mt-3">
+    <form action="/login" method="post" class="mx-auto mt-3" style="max-width: 500px;">
         <div class="mb-3">
             <label class="form-label">E-posta</label>
             <input type="email" name="email" class="form-control" placeholder="E-posta adresinizi giriniz" required>
@@ -24,3 +24,11 @@
         </p>
     </div>
 </div>
+
+<style>
+    @media (max-width: 768px) {
+        form {
+            padding: 15px;
+        }
+    }
+</style>

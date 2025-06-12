@@ -1,16 +1,3 @@
-<style>
-    #expenseChart {
-        max-width: 300px;
-        width: 60%;
-        margin: 0 auto;
-    }
-
-    .pagination .page-item.disabled .page-link {
-        cursor: not-allowed !important;
-        pointer-events: auto;
-    }
-</style>
-
 <div class="container">
     <h2 class="text-center">Giderler</h2>
     
@@ -19,8 +6,8 @@
         <script src="/js/fetch-expenses.js"></script>
     <% } %>
 
-    <div class="d-flex justify-content-between mb-3">
-        <a href="/expenses/add" class="btn btn-success mb-3">
+    <div id="buttonNav" class="d-flex justify-content-between mb-3">
+        <a href="/expenses/add" class="btn btn-success">
             <i class="fa-solid fa-plus fa-xs"></i> Yeni Gider Ekle
         </a>
         
@@ -39,31 +26,35 @@
         <% } %>
     </div>
 
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Kategori</th>
-                <th>Miktar</th>
-                <th>Açıklama</th>
-                <th>Tarih</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% expenses.forEach(expense => { %>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-dark">
                 <tr>
-                    <td><%= expense.category %></td>
-                    <td>₺<%= expense.amount.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></td>
-                    <td><%= expense.description || '-' %></td>
-                    <td><%= expense.date %></td>
-                    <td>
-                        <a href="/expenses/edit/<%= expense._id %>" class="btn btn-warning btn-sm">Düzenle</a>
-                        <a href="/expenses/delete/<%= expense._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
-                    </td>
+                    <th>Kategori</th>
+                    <th>Miktar</th>
+                    <th>Açıklama</th>
+                    <th>Tarih</th>
+                    <th>İşlemler</th>
                 </tr>
-            <% }) %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% expenses.forEach(expense => { %>
+                    <tr>
+                        <td><%= expense.category %></td>
+                        <td>₺<%= expense.amount.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></td>
+                        <td><%= expense.description || '-' %></td>
+                        <td><%= expense.date %></td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="/expenses/edit/<%= expense._id %>" class="btn btn-warning btn-sm">Düzenle</a>
+                                <a href="/expenses/delete/<%= expense._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
 
     <% if (typeof page !== "undefined" && typeof totalPages !== "undefined" && totalPages > 1) { %>
         <nav aria-label="Giderler Sayfalama">
@@ -75,7 +66,7 @@
 
                 <!-- Önceki sayfa butonu -->
                 <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
-                    <a class="page-link" href="/dashboard?page=<%= page - 1 %>"><i class="fa-solid fa-arrow-left"></i></i></a>
+                    <a class="page-link" href="/dashboard?page=<%= page - 1 %>"><i class="fa-solid fa-arrow-left"></i></a>
                 </li>
 
                 <% for (let i = 1; i <= totalPages; i++) { %>
@@ -86,7 +77,7 @@
 
                 <!-- Sonraki sayfa butonu -->
                 <li class="page-item <%= page === totalPages ? 'disabled' : '' %>">
-                    <a class="page-link" href="/dashboard?page=<%= page + 1 %>"><i class="fa-solid fa-arrow-right"></i></i></a>
+                    <a class="page-link" href="/dashboard?page=<%= page + 1 %>"><i class="fa-solid fa-arrow-right"></i></a>
                 </li>
                 
                 <!-- Son sayfa butonu -->
@@ -97,3 +88,100 @@
         </nav>
     <% } %>
 </div>
+
+<style>
+    #expenseChart {
+        max-width: 300px;
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    #buttonNav {
+        margin: 20px 0;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        cursor: not-allowed !important;
+        pointer-events: auto;
+    }
+
+    /* İşlemler sütunu için sabit genişlik */
+    .table th:last-child,
+    .table td:last-child {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    /* Mobil görünümde butonları alt alta diz */
+    .table .d-flex {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .d-flex.justify-content-between {
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .table-responsive {
+            border: none;
+        }
+
+        .table td, .table th {
+            padding: 0.5rem 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pagination .page-item {
+            margin: 2px;
+        }
+
+        #expenseChart {
+            max-width: 250px;
+            width: 80%;
+        }
+
+        .container {
+            padding: 0 10px;
+        }
+
+        /* İşlemler sütunu mobilde daha dar */
+        .table th:last-child,
+        .table td:last-child {
+            width: 120px;
+            min-width: 120px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .table td, .table th {
+            font-size: 0.75rem;
+        }
+
+        /* İşlemler sütunu çok küçük ekranlarda daha da dar */
+        .table th:last-child,
+        .table td:last-child {
+            width: 100px;
+            min-width: 100px;
+        }
+
+        /* Butonları daha küçük yap */
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.7rem;
+        }
+    }
+</style>

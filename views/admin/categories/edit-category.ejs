@@ -1,14 +1,48 @@
 <div class="container mt-2">
     <h2 class="text-center">Kategori Düzenle</h2>
-    <form action="/admin/categories/edit/<%= category._id %>" method="POST" class="w-50 mx-auto mt-3">
+    <form action="/admin/categories/edit/<%= category._id %>" method="POST" class="mx-auto mt-3" style="max-width: 500px;">
         <div class="mb-3">
             <label class="form-label">Kategori Adı</label>
             <input type="text" name="name" class="form-control" value="<%= category.name %>" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Kategori Rengi</label>
-            <input type="color" name="color" class="form-control form-control-color" value="<%= category.color %>">
+            <input type="color" name="color" class="form-control form-control-color me-2 mb-2 color-picker" value="<%= category.color %>">
         </div>
         <button type="submit" class="btn btn-primary w-100">Kaydet</button>
     </form>
 </div>
+
+<style>
+    /* Renk seçici için genel düzenlemeler */
+    .color-picker {
+        width: 50px !important;
+        height: 38px !important;
+        max-width: 50px !important;
+        padding: 1px !important;
+        border-radius: 0.375rem !important;
+        cursor: pointer;
+    }
+
+    .color-picker::-webkit-color-swatch-wrapper {
+        padding: 0;
+        border: none;
+        border-radius: 0.25rem;
+    }
+
+    .color-picker::-webkit-color-swatch {
+        border: none;
+        border-radius: 0.25rem;
+    }
+
+    .color-picker::-moz-color-swatch {
+        border: none;
+        border-radius: 0.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        form {
+            padding: 15px;
+        }
+    }
+</style>

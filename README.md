@@ -169,6 +169,9 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - Kullanıcıların giderlerini **JSON** formatında dışa aktarması sağlandı.
     - Her format için dosya adlandırma standardı uygulanmıştır (`giderler_YYYY-MM-DD.uzantı`).
     - Kullanıcılar yalnızca kendi giderlerini dışa aktarabilmektedir.
+
+### Okul Sonrası
+
 - ✅ | Kayıt olan kullanıcılar log tutulacak.
     - `models/authLog.js` adında bir veritabanı modeli oluşturuldu.
     - Kullanıcı kayıt işlemlerinde başarılı veya başarısız her deneme için log kaydı eklenmektedir.
@@ -177,6 +180,8 @@ PASSWORD_RESET_MAX_ATTEMPT=your_max_attempt # Optional, default is 3
     - Kayıt sırasında hata oluşursa hata mesajı ile birlikte log kaydı oluşturulur.
     - Ayrıcı kullanıcıların **giriş**, **çıkış** ve **şifre sıfırlama** işlemleri de aynı **kayıt işlemlerinde** olduğu gibi log kaydı alınmaktadır.
     - Bu sayede kullanıcı kayıt işlemleri izlenebilir ve olası hatalar kolayca tespit edilebilir.
+- ✅ | Mobil görünüm için CSS iyileştirmeleri yapılacak.
+    - Sayfaların mobil görünümü daha düzenli hale getirilerek optimize edildi.
 - ✖️ | Kullanıcılar birden fazla role sahip olabilmeli.
 - ✖️ | Kategorilere alt kategoriler eklenecek.
 - ✖️ | Kullanıcılar kendileri için kategoriler oluşturabilsin.
