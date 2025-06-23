@@ -39,6 +39,13 @@
             cursor: pointer;
         }
     </style>
+
+    <script>
+    (function() {        
+        const savedTheme = localStorage.getItem('theme');
+        document.documentElement.setAttribute("data-bs-theme", savedTheme)
+    })();
+    </script>
 </head>
 
 <body class="d-flex flex-column">
